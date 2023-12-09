@@ -1,0 +1,17 @@
+.box:hover {
+  background-color: rgb(49, 66, 95, 0.9);
+  cursor: pointer;
+}
+.font {
+  font-size: calc(30px + 0.390625vw);
+}
+.neonText {
+  color: #fff;
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #0ff, 0 0 80px #0ff,
+    0 0 90px #fff, 0 0 100px #fff, 0 0 150px #fff;
+}
+
+.Typography {
+  color: 'red';
+  font-family: 'Times New Roman';
+}
