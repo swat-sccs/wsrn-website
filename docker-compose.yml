@@ -1,13 +1,32 @@
-version: '3.8'
+version: '3.4'
 
 services:
   wsrn:
+    restart: unless-stopped
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=traefik'
+      - 'traefik.http.routers.wsrn.entrypoints=https'
+      - 'traefik.http.routers.wsrn.rule=Host(`wsrn.sccs.swarthmore.edu`)'
+      - 'traefik.http.routers.wsrn.tls=true'
+      - 'traefik.http.routers.wsrn.tls.certresolver=letsEncrypt'
+      - 'traefik.http.services.wsrn.loadbalancer.server.port=9150'
     container_name: wsrn-docker
+    command: npm run start
     ports:
-      - '3000:3000'
+      - '9150:3000'
     volumes:
       - .:/app
       - /app/node_modules
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+    driver: bridge
