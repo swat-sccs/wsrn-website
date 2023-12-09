@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import ThemeRegistry from './ThemeRegistry';
 import Header from './components/header.js';
 import Player from './components/player.js';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'WSRN Homepage',
