@@ -15,7 +15,7 @@ services:
       - 'traefik.http.routers.wsrn.rule=Host(`wsrn.sccs.swarthmore.edu`)'
       - 'traefik.http.routers.wsrn.tls=true'
       - 'traefik.http.routers.wsrn.tls.certresolver=letsEncrypt'
-      - 'traefik.http.services.wsrn.loadbalancer.server.port=9150'
+      - 'traefik.http.services.wsrn.loadbalancer.server.port=3000'
     container_name: wsrn-docker
     command: npm run start
     ports:
