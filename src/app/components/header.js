@@ -19,7 +19,7 @@ export default function Header() {
   //const data = [];
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    console.log(windowSize[0][0]);
+    console.log(windowSize[0]);
   };
 
   React.useEffect(() => {
@@ -27,7 +27,7 @@ export default function Header() {
   }, []);
 
   const RenderListeners = () => {
-    if (data && value == '/' && !error && windowSize[0][0] > 500) {
+    if (data && value == '/' && !error && windowSize[0] > 500) {
       return (
         <>
           <Grid container direction="row" spacing={4}>
