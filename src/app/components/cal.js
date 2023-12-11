@@ -4,13 +4,22 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import iCalendarPlugin from '@fullcalendar/icalendar';
 import listPlugin from '@fullcalendar/list';
+import googleCalendarPlugin from '@fullcalendar/google-calendar';
+
 import * as React from 'react';
 
 import { Container } from '@mui/material';
 
+//
+
 export default function Calendar(props) {
   const event2 = {
     url: 'api/cal',
+  };
+
+  const events = {
+    googleCalendarId:
+      'c_cf9837abb211b7859aceeba417f7548aa7befd045fedb8b6bf4835d8c300b3e1@group.calendar.google.com',
   };
 
   const date = new Date();
@@ -18,9 +27,9 @@ export default function Calendar(props) {
     date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0') + ':' + date.getSeconds();
 
   return (
-    <Container sx={{}}>
+    <Container sx={{ overflowY: 'scroll' }}>
       <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, iCalendarPlugin, listPlugin]}
+        plugins={[dayGridPlugin, timeGridPlugin, iCalendarPlugin, listPlugin, googleCalendarPlugin]}
         initialView={props.initialView}
         eventMinHeight={15}
         nowIndicator={true}
@@ -29,9 +38,10 @@ export default function Calendar(props) {
         expandRows={true}
         scrollTime={scrollTime}
         height={props.height}
-        events={event2}
+        events={events}
         headerToolbar={props.toolBar}
         themeSystem={'bootstrap5'}
+        googleCalendarApiKey=""
       />
     </Container>
   );
