@@ -13,15 +13,17 @@ export default function Header() {
   const pathname = usePathname();
   const [value, setValue] = React.useState(pathname);
   const router = useRouter();
+  const windowSize = React.useState([window.innerWidth, window.innerHeight]);
   //const [data, setData] = React.useState(null);
   const { data, error, isLoading } = useSWR('/api/stream', fetcher, { refreshInterval: 5000 });
-
+  //const data = [];
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    console.log(windowSize[0][0]);
   };
 
   const RenderListeners = () => {
-    if (data && value == '/') {
+    if (data && value == '/' && !error && windowSize[0][0] > 500) {
       return (
         <>
           <Grid container direction="row" spacing={4}>
@@ -40,11 +42,14 @@ export default function Header() {
 
   return (
     <Container sx={{ mt: 1 }}>
-      <Grid container justifyContent="flex-start" spacing={0}>
-        <Grid item xs={1}>
-          <Box sx={{ mt: 2 }}>
-            <RenderListeners />
-          </Box>
+      <Grid
+        container
+        direction={{ xs: 'column', lg: 'row' }}
+        justifyContent="flex-start"
+        spacing={0}
+      >
+        <Grid item xs={1} lg={1}>
+          <Box sx={{}}></Box>
         </Grid>
 
         <Grid item xs={10}>
@@ -55,8 +60,10 @@ export default function Header() {
           </Tabs>
         </Grid>
 
-        <Grid item xs={1}>
-          <Box sx={{}}></Box>
+        <Grid item xs={0} lg={1}>
+          <Box sx={{ mt: 1 }}>
+            <RenderListeners />
+          </Box>
         </Grid>
       </Grid>
     </Container>

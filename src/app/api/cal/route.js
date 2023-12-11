@@ -1,6 +1,7 @@
 // app/api/cal/route.js
 import { NextResponse } from 'next/server';
 import icsToJson from 'ics-to-json';
+import ical from 'node-ical';
 //const icsToJson = require('ics-to-json');
 
 let link =
@@ -9,19 +10,45 @@ let link =
 
 export async function GET(request) {
   console.log(request);
+  let thedata = [];
+  ical.async.fromURL(link, function (err, data) {
+    thedata = data;
+  });
 
   const icsRes = await fetch(link);
   const icsData = await icsRes.text();
+
   // Convert
   const data = icsToJson(icsData);
   let realData = [];
 
   for (let thing of data) {
-    realData.push({
-      start: thing['startDate'],
-      end: thing['startDate'],
-      title: thing['summary'],
-    });
+    let startDate = new Date(
+      parseInt(thing['startDate'].substr(0, 4)),
+      parseInt(thing['startDate'].substr(4, 2)) - 1,
+      parseInt(thing['startDate'].substr(6, 2)),
+      parseInt(thing['startDate'].substr(9, 2)) - 4,
+    );
+    let endDate = new Date(
+      parseInt(thing['startDate'].substr(0, 4)),
+      parseInt(thing['startDate'].substr(4, 2)) - 1,
+      parseInt(thing['startDate'].substr(6, 2)),
+    );
+
+    if (thing['description']) {
+      realData.push({
+        start: startDate,
+        end: endDate,
+        title: thing['summary'],
+        description: thing['description'],
+      });
+    } else {
+      realData.push({
+        start: startDate,
+        end: endDate,
+        title: thing['summary'],
+      });
+    }
   }
 
   return NextResponse.json(realData, { status: 200 });

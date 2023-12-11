@@ -6,7 +6,15 @@ export default function App() {
     <div>
       <Container>
         <Box sx={{ mt: '5%' }}>
-          <Calendar />
+          <Calendar
+            initialView="timeGridWeek"
+            height="65vh"
+            toolBar={{
+              right: 'prev,next',
+              center: 'title',
+              left: 'today',
+            }}
+          />
         </Box>
       </Container>
     </div>

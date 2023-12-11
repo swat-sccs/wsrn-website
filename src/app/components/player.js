@@ -32,6 +32,7 @@ export default function Player() {
 
   const play = () => {
     setAudioLoad(true);
+    //mediaRecorder.start();
     audio.play();
     setPlaying(true);
     audio.onplaying = async function () {
@@ -79,13 +80,13 @@ export default function Player() {
   };
 
   const RenderPlayer = () => {
-    if (isLoading) {
+    if (isLoading && !error) {
       return (
         <Box sx={{ minWidth: '20vw' }}>
           <CircularProgress />
         </Box>
       );
-    } else {
+    } else if (!isLoading && !error) {
       let showTitle = data.source.title;
       return (
         <>
@@ -93,6 +94,14 @@ export default function Player() {
             <span>{showTitle}</span>
           </Typography>
         </>
+      );
+    } else {
+      return (
+        <Box sx={{ minWidth: '20vw' }}>
+          <Typography variant="h6">
+            Something went wrong... Please try refreshing the page
+          </Typography>
+        </Box>
       );
     }
   };
@@ -125,6 +134,7 @@ export default function Player() {
 
   React.useEffect(() => {
     setAudio(new Audio('https://stream.wsrnfm.com/listen'));
+
     checkCurrent();
   }, []);
 
@@ -162,3 +172,7 @@ export default function Player() {
 }
 
 //https://coolors.co/palette/2b2d42-8d99ae-edf2f4-ef233c-d90429
+
+//https://stackoverflow.com/questions/67116204/possibility-to-record-playback-of-browser-audio-element-using-javascript
+
+//https://www.npmjs.com/package/react-audio-visualize

@@ -3,37 +3,35 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import iCalendarPlugin from '@fullcalendar/icalendar';
+import listPlugin from '@fullcalendar/list';
+import * as React from 'react';
+
 import { Container } from '@mui/material';
 
-const event2 = {
-  url: 'api/cal',
-};
+export default function Calendar(props) {
+  const event2 = {
+    url: 'api/cal',
+  };
 
-const toolBar = {
-  right: 'prev,next',
-  center: 'title',
-  left: 'today',
-};
+  const date = new Date();
+  const scrollTime =
+    date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0') + ':' + date.getSeconds();
 
-const date = new Date();
-const scrollTime =
-  date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0') + ':' + date.getSeconds();
-
-export default function Calendar() {
   return (
     <Container sx={{}}>
       <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, iCalendarPlugin]}
-        initialView="timeGridWeek"
-        eventMinHeight={20}
+        plugins={[dayGridPlugin, timeGridPlugin, iCalendarPlugin, listPlugin]}
+        initialView={props.initialView}
+        eventMinHeight={15}
         nowIndicator={true}
         allDaySlot={false}
-        slotDuration={'01:00:00'}
+        slotDuration={'00:30:00'}
         expandRows={true}
         scrollTime={scrollTime}
-        height="65vh"
+        height={props.height}
         events={event2}
-        headerToolbar={toolBar}
+        headerToolbar={props.toolBar}
+        themeSystem={'bootstrap5'}
       />
     </Container>
   );
