@@ -13,7 +13,7 @@ export default function Header() {
   const pathname = usePathname();
   const [value, setValue] = React.useState(pathname);
   const router = useRouter();
-  const windowSize = React.useState([window.innerWidth, window.innerHeight]);
+  const [windowSize, setWindowSize] = React.useState([]);
   //const [data, setData] = React.useState(null);
   const { data, error, isLoading } = useSWR('/api/stream', fetcher, { refreshInterval: 5000 });
   //const data = [];
@@ -21,6 +21,10 @@ export default function Header() {
     setValue(newValue);
     console.log(windowSize[0][0]);
   };
+
+  React.useEffect(() => {
+    setWindowSize([window.innerWidth, window.innerHeight]);
+  }, []);
 
   const RenderListeners = () => {
     if (data && value == '/' && !error && windowSize[0][0] > 500) {
