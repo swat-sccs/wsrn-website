@@ -41,7 +41,7 @@ export default function Calendar(props) {
         events={events}
         headerToolbar={props.toolBar}
         themeSystem={'bootstrap5'}
-        googleCalendarApiKey=""
+        googleCalendarApiKey={process.env.NEXT_PUBLIC_GAPISECRET}
       />
     </Container>
   );
