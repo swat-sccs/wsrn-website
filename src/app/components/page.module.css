@@ -21,3 +21,7 @@
     transform: translate(-100%, 0);
   }
 }
+
+.fc-widget-header {
+  background-color: blue;
+}

@@ -9,11 +9,11 @@ export default function App() {
         <Box sx={{ mt: '5%' }}>
           <Calendar
             initialView="timeGridWeek"
-            height="65vh"
+            height="60vh"
             toolBar={{
               right: 'prev,next',
               center: 'title',
-              left: 'today',
+              left: 'timeGridDay,timeGridWeek today',
             }}
           />
         </Box>

@@ -14,27 +14,44 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import logo from '../../../img/wsrn2.png';
+import logo2 from '../../../img/archives.png';
+
 import styles from './page.module.css';
 import useSWR from 'swr';
 import { PlayArrow, Pause } from '@mui/icons-material';
 import axios from 'axios';
+import AudioMotionAnalyzer from 'audiomotion-analyzer';
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
 const moment = require('moment');
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Player() {
+  const fetcher2 = (url) => axios.get(url).then((res) => res.data);
+
   const [audio, setAudio] = useState(null);
   const [playing, setPlaying] = React.useState(false);
   const [audioLoad, setAudioLoad] = React.useState(false);
   const [currentShow, setCurrentShow] = React.useState(false);
   const [showName, setShowName] = React.useState('');
-  const { data, error, isLoading } = useSWR('/api/stream', fetcher, { refreshInterval: 5000 });
+
+  const {
+    data: data,
+    error: error,
+    isLoading: isLoading,
+  } = useSWR('/api/stream', fetcher, { refreshInterval: 5000 });
+  const {
+    data: states,
+    error: state_error,
+    isLoading: state_isLoading,
+  } = useSWR('/api/states', fetcher, {
+    refreshInterval: 5000,
+  });
 
   const play = () => {
     setAudioLoad(true);
-    //mediaRecorder.start();
     audio.play();
     setPlaying(true);
+
     audio.onplaying = async function () {
       console.log('Metadata for audio loaded');
       setAudioLoad(false);
@@ -92,6 +109,7 @@ export default function Player() {
         <>
           <Typography component="div" variant="h6" overflow="hidden">
             <span>{showTitle}</span>
+            <div id="container"></div>
           </Typography>
         </>
       );
@@ -106,6 +124,34 @@ export default function Player() {
     }
   };
 
+  const RenderImage = () => {
+    if (!state_isLoading && !state_error) {
+      if (states.switch == 'B') {
+        return (
+          <>
+            <Image
+              style={{ width: '90%', height: '90%', borderRadius: '5px' }}
+              src={logo}
+              alt="Picture logo for WSRN"
+            ></Image>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Image
+              style={{ width: '90%', height: '90%', borderRadius: '5px' }}
+              src={logo2}
+              alt="Picture logo for WSRN"
+            ></Image>
+          </>
+        );
+      }
+    } else {
+      return <></>;
+    }
+  };
+
   const checkCurrent = async () => {
     let data = [];
     await axios.get(`api/cal`).then((res) => {
@@ -114,15 +160,16 @@ export default function Player() {
     const date = new Date()
       .toISOString()
       .replace(/-|:/g, '')
-      .replace(/\.\d{3}Z/, 'Z')
-      .replace('Z', '');
-
+      .replace(/\.\d{3}Z/, 'Z');
     for (let thing of data) {
       let start = moment(thing['start']);
       let end = moment(thing['end']);
 
-      if (moment().diff(start, 'minutes') <= 60 && moment().diff(end, 'minutes') >= 0) {
+      //console.log(moment().diff(start, 'minutes') <= 60 && moment().diff(end, 'minutes') < 0);
+
+      if (moment().diff(start, 'minutes') <= 0 && moment().diff(end, 'minutes') < 0) {
         //console.log('THERES A SHOW');
+        //console.log(thing['title']);
         setShowName(thing['title']);
         setCurrentShow(true);
         break;
@@ -140,7 +187,7 @@ export default function Player() {
 
   return (
     <Box sx={{ position: 'fixed', bottom: 0, width: '100%', left: '0', height: '15vh' }}>
-      <Card sx={{ display: 'flex', backgroundColor: '#30475E' }}>
+      <Card sx={{ display: 'flex', backgroundColor: '#30475E', opacity: 0.9, height: '100%' }}>
         <CardContent sx={{ width: '100vw' }}>
           <Grid container direction="row" justifyContent="flex-start" sx={{ width: '100vw' }}>
             <Grid item xs={12} sx={{ mt: -2, width: '100vw', ml: -2 }}>
@@ -149,18 +196,14 @@ export default function Player() {
 
             <Grid container direction="row" justifyContent="flex-start" spacing={1}>
               <Grid item xs={3} lg={1}>
-                <Image
-                  style={{ width: '90%', height: '90%', borderRadius: '5px' }}
-                  src={logo}
-                  alt="Picture logo for WSRN"
-                ></Image>
+                <RenderImage />
               </Grid>
 
               <Grid item xs={6} lg={10} mt={0}>
                 <RenderPlayer />
               </Grid>
 
-              <Grid item xs={1} lg={1} mt={'auto'} mb={'auto'}>
+              <Grid item xs={1} lg={1} mt={'1%'} mb={'auto'}>
                 <PlayPause></PlayPause>
               </Grid>
             </Grid>

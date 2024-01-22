@@ -1,18 +1,15 @@
-// app/api/stream/route.js
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 
-//const icsToJson = require('ics-to-json');
-
-let link = 'https://stream.wsrnfm.com/status-json.xsl';
-
-// To handle a GET request to /api
+let link = 'http://130.58.144.193';
 
 export async function GET(request) {
-  let audio = new Audio('https://stream.wsrnfm.com/listen');
-  console.log(request);
+  let data = {};
+  await axios.get(link).then((res) => {
+    data = res.data;
+  });
 
-  return NextResponse.jsson(audio, { status: 200 });
+  return NextResponse.json(data);
 }
 
 // To handle a POST request to /api
