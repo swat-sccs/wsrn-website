@@ -16,6 +16,7 @@ import { Container } from '@mui/material';
 export default function Calendar(props) {
   const event2 = {
     url: 'api/cal',
+    format: 'ics',
   };
 
   const events = {

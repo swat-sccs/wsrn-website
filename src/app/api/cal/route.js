@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server';
 import icsToJson from 'ics-to-json';
 import ical from 'node-ical';
+const moment = require('moment-timezone');
+
 //const icsToJson = require('ics-to-json');
 
 let link =
@@ -9,49 +11,71 @@ let link =
 // To handle a GET request to /api
 
 export async function GET(request) {
-  console.log(request);
-  let thedata = [];
-  ical.async.fromURL(link, function (err, data) {
-    thedata = data;
-  });
+  let test = [];
+  let output = [];
 
-  const icsRes = await fetch(link);
-  const icsData = await icsRes.text();
+  const data = await ical.async.fromURL(link);
 
-  // Convert
-  const data = icsToJson(icsData);
-  let realData = [];
+  for (let k in data) {
+    if (!Object.prototype.hasOwnProperty.call(data, k)) continue;
+    const event = data[k];
+    if (event.type !== 'VEVENT' || !event.rrule) continue;
 
-  for (let thing of data) {
-    let startDate = new Date(
-      parseInt(thing['startDate'].substr(0, 4)),
-      parseInt(thing['startDate'].substr(4, 2)) - 1,
-      parseInt(thing['startDate'].substr(6, 2)),
-      parseInt(thing['startDate'].substr(9, 2)) - 4,
+    const dates = event.rrule.between(
+      new Date(2023, 0, 1, 0, 0, 0, 0),
+      new Date(2024, 11, 31, 0, 0, 0, 0),
     );
-    let endDate = new Date(
-      parseInt(thing['startDate'].substr(0, 4)),
-      parseInt(thing['startDate'].substr(4, 2)) - 1,
-      parseInt(thing['startDate'].substr(6, 2)),
-    );
+    if (dates.length === 0) continue;
 
-    if (thing['description']) {
-      realData.push({
-        start: startDate,
-        end: endDate,
-        title: thing['summary'],
-        description: thing['description'],
-      });
+    test.push({ Show: event.summary, Start: event.start });
+
+    dates.forEach((date) => {
+      let newDate;
+      if (event.rrule.origOptions.tzid) {
+        // tzid present (calculate offset from recurrence start)
+        const dateTimezone = moment.tz.zone('UTC');
+        const localTimezone = moment.tz.guess();
+        const tz =
+          event.rrule.origOptions.tzid === localTimezone
+            ? event.rrule.origOptions.tzid
+            : localTimezone;
+        const timezone = moment.tz.zone(tz);
+        const offset = timezone.utcOffset(date) - dateTimezone.utcOffset(date);
+        newDate = moment(date).add(offset, 'minutes').toDate();
+      } else {
+        // tzid not present (calculate offset from original start)
+        newDate = new Date(
+          date.setHours(
+            date.getHours() - (event.start.getTimezoneOffset() - date.getTimezoneOffset()) / 60,
+          ),
+        );
+      }
+      //test.push(newDate);
+      const start = moment(newDate);
+      //console.log('Recurrence start:', start);
+      //test.push({ Event: event.summary, OG_Start: event.start, RecurrenceS: start });
+    });
+  }
+  //console.log(JSON.stringify(test, null, ' '));
+
+  for (let thing of test) {
+    var beginningTime = moment(thing.Start);
+    var endTime = moment(moment());
+
+    if (endTime.diff(beginningTime, 'hours') == 0) {
+      output = {
+        Show: thing.Show.toLowerCase()
+          .split(' ')
+          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(' '),
+      };
+      break;
     } else {
-      realData.push({
-        start: startDate,
-        end: endDate,
-        title: thing['summary'],
-      });
+      output = { Show: 'NA' };
     }
   }
 
-  return NextResponse.json(realData, { status: 200 });
+  return NextResponse.json(output, { status: 200 });
 }
 
 // To handle a POST request to /api

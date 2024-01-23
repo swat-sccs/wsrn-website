@@ -5,7 +5,7 @@ import {
   Grid,
   Typography,
   CardContent,
-  Button,
+  Chip,
   Card,
   Box,
   CircularProgress,
@@ -18,7 +18,7 @@ import logo2 from '../../../img/archives.png';
 
 import styles from './page.module.css';
 import useSWR from 'swr';
-import { PlayArrow, Pause } from '@mui/icons-material';
+import { PlayArrow, Pause, Sensors } from '@mui/icons-material';
 import axios from 'axios';
 import AudioMotionAnalyzer from 'audiomotion-analyzer';
 
@@ -32,7 +32,6 @@ export default function Player() {
   const [playing, setPlaying] = React.useState(false);
   const [audioLoad, setAudioLoad] = React.useState(false);
   const [currentShow, setCurrentShow] = React.useState(false);
-  const [showName, setShowName] = React.useState('');
 
   const {
     data: data,
@@ -45,6 +44,14 @@ export default function Player() {
     isLoading: state_isLoading,
   } = useSWR('/api/states', fetcher, {
     refreshInterval: 5000,
+  });
+
+  const {
+    data: showName,
+    error: showName_error,
+    isLoading: showName_isLoading,
+  } = useSWR('/api/cal', fetcher, {
+    refreshInterval: 2000,
   });
 
   const play = () => {
@@ -97,22 +104,38 @@ export default function Player() {
   };
 
   const RenderPlayer = () => {
-    if (isLoading && !error) {
+    if (showName_isLoading || (isLoading && !error && !showName_error)) {
       return (
         <Box sx={{ minWidth: '20vw' }}>
           <CircularProgress />
         </Box>
       );
-    } else if (!isLoading && !error) {
-      let showTitle = data.source.title;
-      return (
-        <>
-          <Typography component="div" variant="h6" overflow="hidden">
-            <span>{showTitle}</span>
-            <div id="container"></div>
-          </Typography>
-        </>
-      );
+    } else if (!isLoading && !error && !showName_isLoading) {
+      if (showName.Show != 'NA') {
+        return (
+          <>
+            <Typography component="div" variant="h6" overflow="hidden">
+              <Chip
+                label="LIVE"
+                style={{ backgroundColor: '#F05454' }}
+                icon={<Sensors sx={{ height: 20, width: 20 }} />}
+              ></Chip>
+              &nbsp;
+            </Typography>
+            <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
+              {showName.Show}
+            </Typography>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
+              {data.source.title}
+            </Typography>
+          </>
+        );
+      }
     } else {
       return (
         <Box sx={{ minWidth: '20vw' }}>
@@ -152,37 +175,8 @@ export default function Player() {
     }
   };
 
-  const checkCurrent = async () => {
-    let data = [];
-    await axios.get(`api/cal`).then((res) => {
-      data = res.data;
-    });
-    const date = new Date()
-      .toISOString()
-      .replace(/-|:/g, '')
-      .replace(/\.\d{3}Z/, 'Z');
-    for (let thing of data) {
-      let start = moment(thing['start']);
-      let end = moment(thing['end']);
-
-      //console.log(moment().diff(start, 'minutes') <= 60 && moment().diff(end, 'minutes') < 0);
-
-      if (moment().diff(start, 'minutes') <= 0 && moment().diff(end, 'minutes') < 0) {
-        //console.log('THERES A SHOW');
-        //console.log(thing['title']);
-        setShowName(thing['title']);
-        setCurrentShow(true);
-        break;
-      } else {
-        setCurrentShow(false);
-      }
-    }
-  };
-
   React.useEffect(() => {
     setAudio(new Audio('https://stream.wsrnfm.com/listen'));
-
-    checkCurrent();
   }, []);
 
   return (
