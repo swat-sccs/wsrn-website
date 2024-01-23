@@ -43,7 +43,7 @@ export default function Player() {
     error: state_error,
     isLoading: state_isLoading,
   } = useSWR('/api/states', fetcher, {
-    refreshInterval: 5000,
+    refreshInterval: 1000,
   });
 
   const {
@@ -111,7 +111,7 @@ export default function Player() {
         </Box>
       );
     } else if (!isLoading && !error && !showName_isLoading) {
-      if (showName.Show != 'NA') {
+      if (showName.Show != 'NA' && states.switch == 'B') {
         return (
           <>
             <Typography component="div" variant="h6" overflow="hidden">
