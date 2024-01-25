@@ -15,6 +15,7 @@ import {
 import Image from 'next/image';
 import logo from '../../../img/wsrn2.png';
 import logo2 from '../../../img/archives.png';
+import { Headphones } from '@mui/icons-material';
 
 import styles from './page.module.css';
 import useSWR from 'swr';
@@ -32,6 +33,9 @@ export default function Player() {
   const [playing, setPlaying] = React.useState(false);
   const [audioLoad, setAudioLoad] = React.useState(false);
   const [currentShow, setCurrentShow] = React.useState(false);
+  const [windowSize, setWindowSize] = React.useState([]);
+
+  const [bottomHeight, setBottomHeight] = React.useState('15vh');
 
   const {
     data: data,
@@ -120,6 +124,12 @@ export default function Player() {
                 style={{ backgroundColor: '#F05454' }}
                 icon={<Sensors sx={{ height: 20, width: 20 }} />}
               ></Chip>
+              &nbsp; &nbsp;
+              <Chip
+                label={data.source.listeners}
+                style={{ backgroundColor: '#223547' }}
+                icon={<Headphones sx={{ height: 20, width: 20 }} />}
+              ></Chip>
               &nbsp;
             </Typography>
             <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
@@ -177,10 +187,16 @@ export default function Player() {
 
   React.useEffect(() => {
     setAudio(new Audio('https://stream.wsrnfm.com/listen'));
+    setWindowSize([window.innerWidth, window.innerHeight]);
+  }, []);
+  React.useEffect(() => {
+    if (window.innerWidth < 500) {
+      setBottomHeight('17vh');
+    }
   }, []);
 
   return (
-    <Box sx={{ position: 'fixed', bottom: 0, width: '100%', left: '0', height: '15vh' }}>
+    <Box sx={{ position: 'fixed', bottom: 0, width: '100%', left: '0', height: bottomHeight }}>
       <Card sx={{ display: 'flex', backgroundColor: '#30475E', opacity: 0.9, height: '100%' }}>
         <CardContent sx={{ width: '100vw' }}>
           <Grid container direction="row" justifyContent="flex-start" sx={{ width: '100vw' }}>
@@ -189,17 +205,18 @@ export default function Player() {
             </Grid>
 
             <Grid container direction="row" justifyContent="flex-start" spacing={1}>
-              <Grid item xs={3} lg={1}>
+              <Grid item xs={3} sm={1.7} md={1.2} lg={1}>
                 <RenderImage />
               </Grid>
 
-              <Grid item xs={6} lg={10} mt={0}>
+              <Grid item xs={9} sm={8.5} md={9.5} lg={10} mt={0}>
                 <RenderPlayer />
               </Grid>
-
-              <Grid item xs={1} lg={1} mt={'1%'} mb={'auto'}>
-                <PlayPause></PlayPause>
-              </Grid>
+              {windowSize[0] > 500 ? (
+                <Grid item xs={1} sm={1} md={1} lg={1} mt={'1%'}>
+                  <PlayPause></PlayPause>
+                </Grid>
+              ) : null}
             </Grid>
           </Grid>
         </CardContent>

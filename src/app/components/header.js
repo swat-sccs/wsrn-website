@@ -14,6 +14,7 @@ export default function Header() {
   const [value, setValue] = React.useState(pathname);
   const router = useRouter();
   const [windowSize, setWindowSize] = React.useState([]);
+  const [ShowSmallListeners, setShowSmallListeners] = React.useState(false);
   //const [data, setData] = React.useState(null);
   const { data, error, isLoading } = useSWR('/api/stream', fetcher, { refreshInterval: 5000 });
   //const data = [];
@@ -26,8 +27,17 @@ export default function Header() {
     setWindowSize([window.innerWidth, window.innerHeight]);
   }, []);
 
+  React.useEffect(() => {
+    if (window.innerWidth < 500) {
+      console.log('Test');
+      setShowSmallListeners(true);
+    } else {
+      setShowSmallListeners(false);
+    }
+  }, []);
+
   const RenderListeners = () => {
-    if (data && value == '/' && !error && windowSize[0] > 500) {
+    if (data && value == '/' && !error) {
       return (
         <>
           <Grid container direction="row" spacing={4}>
@@ -62,12 +72,6 @@ export default function Header() {
             <Tab value="/schedule" label="Schedule" onClick={() => router.push('/schedule')} />
             <Tab value="/about_us" label="About us" onClick={() => router.push('/about_us')} />
           </Tabs>
-        </Grid>
-
-        <Grid item xs={0} lg={1}>
-          <Box sx={{ mt: 1 }}>
-            <RenderListeners />
-          </Box>
         </Grid>
       </Grid>
     </Container>
