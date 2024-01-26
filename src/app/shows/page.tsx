@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import Image from 'next/image';
 import logo from '../../../img/studio_a.jpg';
+import styles from './page.module.css';
 
 import wsrn from '../../../public/img/www.jpg';
 
@@ -19,6 +20,16 @@ const itemData = [
     rows: 2,
     cols: 2,
     featured: true,
+    description: 'This is a radio show that does things on the radio. (prob music or something)',
+  },
+  {
+    img: '/img/swatswim.jpg',
+    title: 'WSRN',
+    author: 'Damian Rene',
+    rows: 2,
+    cols: 2,
+    featured: true,
+    description: 'This is a radio show that does things on the radio. (prob music or something)',
   },
 ];
 
@@ -27,29 +38,41 @@ export default function App() {
     <Grid container justifyContent="center" alignItems="center">
       <Grid item>
         <Box sx={{ overflowY: 'scroll', width: '80vw', height: '77vh' }}>
-          <ImageList variant="woven" cols={3} gap={8}>
+          <ImageList cols={4} gap={20}>
             {itemData.map((item) => (
               <ImageListItem key={item.img}>
-                <Image
-                  src={`${item.img}`}
-                  alt={item.title}
-                  width={400}
-                  height={600}
-                  objectFit="contain"
-                />
-
-                <ImageListItemBar
-                  title={item.title}
-                  subtitle={item.author}
-                  actionIcon={
-                    <IconButton
-                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                      aria-label={`info about ${item.title}`}
+                <Grid container justifyContent="center" alignItems="center">
+                  <Grid item>
+                    <Image
+                      className={styles.image}
+                      src={`${item.img}`}
+                      alt={item.title}
+                      width={250}
+                      height={350}
+                      objectFit="contain"
+                    ></Image>
+                    <Typography
+                      variant="body1"
+                      className={styles.words}
+                      sx={{ position: 'absolute', top: 0 }}
                     >
-                      <InfoIcon />
-                    </IconButton>
-                  }
-                />
+                      {item.description}
+                    </Typography>
+
+                    <ImageListItemBar
+                      title={item.title}
+                      subtitle={item.author}
+                      actionIcon={
+                        <IconButton
+                          sx={{ color: 'rgba(255, 255, 255, 0.6)' }}
+                          aria-label={`info about ${item.title}`}
+                        >
+                          <InfoIcon />
+                        </IconButton>
+                      }
+                    />
+                  </Grid>
+                </Grid>
               </ImageListItem>
             ))}
           </ImageList>

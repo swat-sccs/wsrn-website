@@ -61,8 +61,11 @@ export async function GET(request) {
   for (let thing of test) {
     var beginningTime = moment(thing.Start);
     var endTime = moment(moment());
-    //console.log(endTime.diff(beginningTime, 'hours'));
-    if (endTime.diff(beginningTime, 'hours') == 0) {
+
+    if (
+      beginningTime.diff(endTime, 'hours', true) < 0 &&
+      beginningTime.diff(endTime, 'hours', true) > -1
+    ) {
       output = {
         Show: thing.Show.toLowerCase()
           .split(' ')

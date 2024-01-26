@@ -140,6 +140,12 @@ export default function Player() {
       } else {
         return (
           <>
+            &nbsp;
+            <Chip
+              label={data.source.listeners}
+              style={{ backgroundColor: '#223547' }}
+              icon={<Headphones sx={{ height: 20, width: 20 }} />}
+            ></Chip>
             <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
               {data.source.title}
             </Typography>
@@ -205,11 +211,17 @@ export default function Player() {
             </Grid>
 
             <Grid container direction="row" justifyContent="flex-start" spacing={1}>
-              <Grid item xs={3} sm={1.7} md={1.2} lg={1}>
-                <RenderImage />
-              </Grid>
+              {windowSize[0] < 500 ? (
+                <Grid item xs={3} sm={1.7} md={1.2} lg={1} sx={{ ml: '-2%', mt: '2%' }}>
+                  <RenderImage />
+                </Grid>
+              ) : (
+                <Grid item xs={3} sm={1.7} md={1.2} lg={1}>
+                  <RenderImage />
+                </Grid>
+              )}
 
-              <Grid item xs={9} sm={8.5} md={9.5} lg={10} mt={0}>
+              <Grid item xs={8.5} sm={8.5} md={9.5} lg={10} mt={0}>
                 <RenderPlayer />
               </Grid>
               {windowSize[0] > 500 ? (

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Container, Grid, Typography, Box, Fab, Card } from '@mui/material';
 import Calendar from '../app/components/cal.js';
 import { Russo_One } from 'next/font/google';
-import { PlayArrow, Pause, Sensors } from '@mui/icons-material';
+import { PlayArrowRounded, PauseRounded, Sensors } from '@mui/icons-material';
 
 const russo = Russo_One({ subsets: ['latin'], weight: ['400'] });
 
@@ -47,14 +47,14 @@ export default function Home() {
     if (!playing) {
       return (
         <>
-          <PlayArrow onClick={() => play()} sx={{ height: 200, width: 200 }} />
+          <PlayArrowRounded onClick={() => play()} sx={{ height: 200, width: 200 }} />
         </>
       );
     }
     if (playing) {
       return (
         <>
-          <Pause onClick={() => pause()} sx={{ height: 200, width: 200 }} />
+          <PauseRounded onClick={() => pause()} sx={{ height: 200, width: 200 }} />
         </>
       );
     }
