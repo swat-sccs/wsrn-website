@@ -6,6 +6,9 @@ import Player from './components/player.js';
 export const metadata: Metadata = {
   title: 'WSRN | 91.5FM',
   description: 'Listen to WSRN right here on wsrnfm.com!',
+  icons: {
+    icon: '/icon.png', // /public path
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

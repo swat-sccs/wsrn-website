@@ -22,12 +22,10 @@ export async function GET(request) {
     if (event.type !== 'VEVENT' || !event.rrule) continue;
 
     const dates = event.rrule.between(
-      new Date(2023, 0, 1, 0, 0, 0, 0),
-      new Date(2024, 11, 31, 0, 0, 0, 0),
+      new Date(moment().year(), 0, 1, 0, 0, 0, 0),
+      new Date(moment().year() + 1, 11, 31, 23, 59, 0, 0),
     );
     if (dates.length === 0) continue;
-
-    test.push({ Show: event.summary, Start: event.start });
 
     dates.forEach((date) => {
       let newDate;
@@ -42,6 +40,8 @@ export async function GET(request) {
         const timezone = moment.tz.zone(tz);
         const offset = timezone.utcOffset(date) - dateTimezone.utcOffset(date);
         newDate = moment(date).add(offset, 'minutes').toDate();
+
+        test.push({ Show: event.summary, Start: date });
       } else {
         // tzid not present (calculate offset from original start)
         newDate = new Date(
@@ -50,9 +50,8 @@ export async function GET(request) {
           ),
         );
       }
-      //test.push(newDate);
+
       const start = moment(newDate);
-      //console.log('Recurrence start:', start);
       //test.push({ Event: event.summary, OG_Start: event.start, RecurrenceS: start });
     });
   }
@@ -60,11 +59,18 @@ export async function GET(request) {
 
   for (let thing of test) {
     var beginningTime = moment(thing.Start);
-    var endTime = moment(moment());
+    var endTime = moment();
+    let now = moment();
+
+    if (thing.Show == 'bum review') {
+      console.log(moment(thing.Start));
+      //console.log(thing.Show, now.diff(thing.Start, 'days', true));
+      //console.log(now.diff(beginningTime, 'hours', true));
+    }
 
     if (
-      beginningTime.diff(endTime, 'hours', true) < 0 &&
-      beginningTime.diff(endTime, 'hours', true) > -1
+      now.diff(beginningTime, 'hours', true) >= -1 &&
+      now.diff(beginningTime, 'hours', true) <= 0
     ) {
       output = {
         Show: thing.Show.toLowerCase()

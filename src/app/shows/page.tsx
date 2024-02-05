@@ -44,20 +44,34 @@ export default function App() {
                 <Grid container justifyContent="center" alignItems="center">
                   <Grid item>
                     <Image
-                      className={styles.image}
                       src={`${item.img}`}
                       alt={item.title}
                       width={250}
                       height={350}
                       objectFit="contain"
                     ></Image>
-                    <Typography
-                      variant="body1"
+
+                    <Box
                       className={styles.words}
-                      sx={{ position: 'absolute', top: 0 }}
+                      sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0,0,0,0.7)',
+                      }}
                     >
-                      {item.description}
-                    </Typography>
+                      <Typography
+                        variant="body1"
+                        textAlign="center"
+                        sx={{
+                          mt: '50%',
+                        }}
+                      >
+                        {item.description}
+                      </Typography>
+                    </Box>
 
                     <ImageListItemBar
                       title={item.title}
