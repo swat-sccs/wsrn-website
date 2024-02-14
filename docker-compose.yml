@@ -18,9 +18,6 @@ services:
       - 'traefik.http.services.wsrn.loadbalancer.server.port=3000'
     container_name: wsrn-docker
     command: npm run start
-    volumes:
-      - .:/app
-      - /app/node_modules
     networks:
       - traefik
 
