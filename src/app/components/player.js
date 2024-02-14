@@ -42,19 +42,12 @@ export default function Player() {
     error: error,
     isLoading: isLoading,
   } = useSWR('/api/stream', fetcher, { refreshInterval: 5000 });
-  const {
-    data: states,
-    error: state_error,
-    isLoading: state_isLoading,
-  } = useSWR('/api/states', fetcher, {
-    refreshInterval: 1000,
-  });
 
   const {
     data: showName,
     error: showName_error,
     isLoading: showName_isLoading,
-  } = useSWR('/api/cal', fetcher, {
+  } = useSWR('/api/states', fetcher, {
     refreshInterval: 2000,
   });
 
@@ -115,7 +108,7 @@ export default function Player() {
         </Box>
       );
     } else if (!isLoading && !error && !showName_isLoading) {
-      if (showName.Show != 'NA' && states.switch == 'B') {
+      if (showName.Show != 'NA' && showName.switch == 'B') {
         return (
           <>
             <Typography component="div" variant="h6" overflow="hidden">
@@ -164,8 +157,8 @@ export default function Player() {
   };
 
   const RenderImage = () => {
-    if (!state_isLoading && !state_error) {
-      if (states.switch == 'B') {
+    if (!showName_isLoading && !showName_error) {
+      if (showName.switch == 'B') {
         return (
           <>
             <Image

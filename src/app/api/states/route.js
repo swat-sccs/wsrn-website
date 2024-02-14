@@ -5,9 +5,15 @@ let link = 'http://130.58.144.193';
 
 export async function GET(request) {
   let data = {};
-  await axios.get(link).then((res) => {
-    data = res.data;
-  });
+  await axios
+    .get(link, {
+      headers: {
+        'X-API-Key': process.env.KEY, //the token is a variable which holds the token
+      },
+    })
+    .then((res) => {
+      data = res.data;
+    });
 
   return NextResponse.json(data);
 }
