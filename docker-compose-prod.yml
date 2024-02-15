@@ -16,6 +16,7 @@ services:
       - 'traefik.http.routers.wsrn.tls=true'
       - 'traefik.http.routers.wsrn.tls.certresolver=letsEncrypt'
       - 'traefik.http.services.wsrn.loadbalancer.server.port=3000'
+    command: npm run start
     networks:
       - traefik
 
