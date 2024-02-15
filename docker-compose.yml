@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   wsrn:
+    init: true
     restart: unless-stopped
     build:
       context: .
