@@ -147,11 +147,17 @@ export default function Player() {
       }
     } else {
       return (
-        <Box sx={{ minWidth: '20vw' }}>
-          <Typography variant="h6">
-            Something went wrong... Please try refreshing the page
+        <>
+          &nbsp;
+          <Chip
+            label={1}
+            style={{ backgroundColor: '#223547' }}
+            icon={<Headphones sx={{ height: 20, width: 20 }} />}
+          ></Chip>
+          <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
+            WSRN Archives
           </Typography>
-        </Box>
+        </>
       );
     }
   };
@@ -180,7 +186,15 @@ export default function Player() {
         );
       }
     } else {
-      return <></>;
+      return (
+        <>
+          <Image
+            style={{ width: '90%', height: '90%', borderRadius: '5px' }}
+            src={logo2}
+            alt="Picture logo for WSRN"
+          ></Image>
+        </>
+      );
     }
   };
 
