@@ -24,6 +24,7 @@ import axios from 'axios';
 import AudioMotionAnalyzer from 'audiomotion-analyzer';
 
 const moment = require('moment');
+
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Player() {

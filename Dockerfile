@@ -1,11 +1,9 @@
-FROM node:21-alpine
+FROM node:18-alpine
 ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY . .
-RUN rm -rf node_modules
-RUN npm install --production 
-RUN npm install -g serve
-RUN chown -R node /usr/src/app
+RUN mkdir /app && chown -R node:node /app
+WORKDIR /app
 USER node
+COPY --chown=node:node . .
+RUN npm ci --only=production && npm cache clean --force
 ENV HOSTNAME "0.0.0.0"
 RUN npm run build

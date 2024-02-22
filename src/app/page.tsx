@@ -5,14 +5,25 @@ import { Container, Grid, Typography, Box, Fab, Card } from '@mui/material';
 import Calendar from '../app/components/cal.js';
 import { Russo_One } from 'next/font/google';
 import { PlayArrowRounded, PauseRounded, Sensors } from '@mui/icons-material';
+import useSWR from 'swr';
 
 const russo = Russo_One({ subsets: ['latin'], weight: ['400'] });
 
 export default function Home() {
+  const fetcher = (url: any) => fetch(url).then((res) => res.json());
+
   const [windowSize, setWindowSize]: any[] = React.useState([]);
   const [audio, setAudio]: any[] = useState(null);
   const [playing, setPlaying] = React.useState(false);
   const [audioLoad, setAudioLoad] = React.useState(false);
+
+  const {
+    data: showName,
+    error: showName_error,
+    isLoading: showName_isLoading,
+  } = useSWR('/api/states', fetcher, {
+    refreshInterval: 2000,
+  });
 
   React.useEffect(() => {
     setWindowSize([window.innerWidth, window.innerHeight]);
@@ -43,6 +54,7 @@ export default function Home() {
             />
           </Card>
   */
+
   const PlayPause = () => {
     if (!playing) {
       return (

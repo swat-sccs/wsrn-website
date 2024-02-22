@@ -5,13 +5,14 @@ import { Grid, Tab, Tabs, Container, Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { Headphones } from '@mui/icons-material';
+import Link from 'next/link';
 
 import useSWR from 'swr';
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Header() {
   const pathname = usePathname();
-  const [value, setValue] = React.useState(pathname);
+  const [value, setValue] = React.useState(0);
   const router = useRouter();
   const [windowSize, setWindowSize] = React.useState([]);
   const [ShowSmallListeners, setShowSmallListeners] = React.useState(false);
@@ -19,8 +20,7 @@ export default function Header() {
   const { data, error, isLoading } = useSWR('/api/stream', fetcher, { refreshInterval: 5000 });
   //const data = [];
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-    console.log(windowSize[0]);
+    setValue(event);
   };
 
   React.useEffect(() => {
@@ -67,10 +67,26 @@ export default function Header() {
         </Grid>
 
         <Grid item xs={10}>
-          <Tabs value={value} onChange={handleChange} aria-label="Navigation Tabs" centered>
-            <Tab value="/" label="Listen" onClick={() => router.push('/')} />
-            <Tab value="/schedule" label="Schedule" onClick={() => router.push('/schedule')} />
-            <Tab value="/about_us" label="About us" onClick={() => router.push('/about_us')} />
+          <Tabs value={value} aria-label="Navigation Tabs" centered>
+            <Link href="/" passHref style={{ color: 'white' }} onClick={() => handleChange(0)}>
+              <Tab value="0" label="Listen" />
+            </Link>
+            <Link
+              href="/schedule"
+              passHref
+              style={{ color: 'white' }}
+              onClick={() => handleChange(1)}
+            >
+              <Tab value="1" label="Schedule" />
+            </Link>
+            <Link
+              href="/about_us"
+              passHref
+              style={{ color: 'white' }}
+              onClick={() => handleChange(2)}
+            >
+              <Tab value="2" label="About us" />
+            </Link>
           </Tabs>
         </Grid>
       </Grid>
