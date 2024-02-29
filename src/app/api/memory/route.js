@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 
-let link = process.env.IP;
+let link = process.env.IP + '/mem';
 
 export async function GET(request) {
   let data = {};

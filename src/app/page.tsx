@@ -6,6 +6,7 @@ import Calendar from '../app/components/cal.js';
 import { Russo_One } from 'next/font/google';
 import { PlayArrowRounded, PauseRounded, Sensors } from '@mui/icons-material';
 import useSWR from 'swr';
+import Upcoming from '@/app/components/upcoming.js';
 
 const russo = Russo_One({ subsets: ['latin'], weight: ['400'] });
 
@@ -90,6 +91,11 @@ export default function Home() {
               Worldwide · Swarthmore · Radio · Network
             </Typography>
           </Grid>
+          {/*
+    <Upcoming></Upcoming>
+    
+  */}
+
           {windowSize[0] < 600 ? (
             <Grid item sx={{ mt: 5 }}>
               <Grid container justifyContent="center" alignContent="center">
@@ -100,8 +106,6 @@ export default function Home() {
             </Grid>
           ) : null}
         </Grid>
-
-        <Box sx={{ mt: '5%' }}></Box>
       </Container>
     </div>
 
