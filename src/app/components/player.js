@@ -42,7 +42,7 @@ export default function Player() {
     data: data,
     error: error,
     isLoading: isLoading,
-  } = useSWR('/api/stream', fetcher, { refreshInterval: 5000 });
+  } = useSWR('/api/stream', fetcher, { refreshInterval: 4000 });
 
   const {
     data: showName,
@@ -200,10 +200,8 @@ export default function Player() {
   };
 
   React.useEffect(() => {
-    setAudio(new Audio('https://stream.wsrnfm.com/listen'));
+    setAudio(new Audio('https://icecast.wsrn.sccs.swarthmore.edu/listen'));
     setWindowSize([window.innerWidth, window.innerHeight]);
-  }, []);
-  React.useEffect(() => {
     if (window.innerWidth < 500) {
       setBottomHeight('17vh');
     }

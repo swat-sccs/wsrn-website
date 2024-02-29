@@ -28,7 +28,9 @@ export default function Home() {
 
   React.useEffect(() => {
     setWindowSize([window.innerWidth, window.innerHeight]);
-    setAudio(new Audio('https://stream.wsrnfm.com/listen'));
+    if (window.innerWidth < 600) {
+      setAudio(new Audio('https://stream.wsrnfm.com/listen'));
+    }
   }, []);
 
   const play = () => {

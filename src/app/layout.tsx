@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeRegistry options={{ key: 'mui' }}>
           <Header></Header>
-          <link rel="icon" href="./favicon.ico" sizes="any" />
+          <link rel="icon" href="favicon.ico" sizes="any" />
           {children}
           <Player></Player>
         </ThemeRegistry>

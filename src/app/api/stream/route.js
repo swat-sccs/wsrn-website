@@ -4,11 +4,10 @@ import axios from 'axios';
 
 //const icsToJson = require('ics-to-json');
 
-let link = 'https://stream.wsrnfm.com/status-json.xsl';
+let link = 'https://icecast.wsrn.sccs.swarthmore.edu/status-json.xsl';
 // To handle a GET request to /api
 
 export async function GET(request) {
-  console.log(request);
   let data = {};
   await axios.get(link).then((res) => {
     data = res.data;
@@ -20,7 +19,6 @@ export async function GET(request) {
 // To handle a POST request to /api
 export async function POST(request) {
   // Do whatever you want
-  console.log(request);
   return NextResponse.json({ message: 'Hello World' }, { status: 200 });
 }
 
