@@ -1,8 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-
 import { Container, Grid, Typography, Box, Fab, Card } from '@mui/material';
-import Calendar from '../app/components/cal.js';
 import { Russo_One } from 'next/font/google';
 import { PlayArrowRounded, PauseRounded, Sensors } from '@mui/icons-material';
 import useSWR from 'swr';
@@ -97,16 +95,6 @@ export default function Home() {
     <Upcoming></Upcoming>
     
   */}
-
-          {windowSize[0] < 600 ? (
-            <Grid item sx={{ mt: 5 }}>
-              <Grid container justifyContent="center" alignContent="center">
-                <Grid item>
-                  <PlayPause></PlayPause>
-                </Grid>
-              </Grid>
-            </Grid>
-          ) : null}
         </Grid>
       </Container>
     </div>
