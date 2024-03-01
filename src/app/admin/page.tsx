@@ -178,7 +178,7 @@ export default function CalendarPage() {
           />
         </Grid>
         <Grid item xs={3} lg={1}>
-          <FormControl fullWidth>
+          <FormControl>
             <InputLabel id="demo-simple-select-label">Category</InputLabel>
             <Select value={searchCategory} label="Age" onChange={handleChange}>
               <MenuItem value={'title'}>Title</MenuItem>
