@@ -47,7 +47,7 @@ export default function Player() {
     name: 'WSRN Radio',
     endpoint: `${url}/listen`,
     codec: 'AAC',
-    metadataTypes: [''],
+    metadataTypes: ['icy'],
   };
 
   useEffect(() => {

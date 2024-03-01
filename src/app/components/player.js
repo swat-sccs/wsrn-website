@@ -19,16 +19,17 @@ import { Headphones } from '@mui/icons-material';
 
 import styles from './page.module.css';
 import useSWR from 'swr';
-import { PlayArrow, Pause, Sensors } from '@mui/icons-material';
+import { PlayArrow, Pause, Sensors, PlayArrowRounded, PauseRounded } from '@mui/icons-material';
 import axios from 'axios';
 import AudioMotionAnalyzer from 'audiomotion-analyzer';
+import { usePathname } from 'next/navigation';
 
 const moment = require('moment');
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Player() {
-  const fetcher2 = (url) => axios.get(url).then((res) => res.data);
+  const pathname = usePathname();
 
   const [audio, setAudio] = useState(null);
   const [playing, setPlaying] = React.useState(false);
@@ -207,38 +208,65 @@ export default function Player() {
     }
   }, []);
 
+  const PlayPauseMobile = () => {
+    if (!playing) {
+      return (
+        <>
+          <PlayArrowRounded onClick={() => play()} sx={{ height: 200, width: 200 }} />
+        </>
+      );
+    }
+    if (playing) {
+      return (
+        <>
+          <PauseRounded onClick={() => pause()} sx={{ height: 200, width: 200 }} />
+        </>
+      );
+    }
+  };
+
   return (
-    <Box sx={{ position: 'fixed', bottom: 0, width: '100%', left: '0', height: bottomHeight }}>
-      <Card sx={{ display: 'flex', backgroundColor: '#30475E', opacity: 0.9, height: '100%' }}>
-        <CardContent sx={{ width: '100vw' }}>
-          <Grid container direction="row" justifyContent="flex-start" sx={{ width: '100vw' }}>
-            <Grid item xs={12} sx={{ mt: -2, width: '100vw', ml: -2 }}>
-              <Loading />
-            </Grid>
-
-            <Grid container direction="row" justifyContent="flex-start" spacing={1}>
-              {windowSize[0] < 500 ? (
-                <Grid item xs={3} sm={1.7} md={1.2} lg={1} sx={{ ml: '-2%', mt: '2%' }}>
-                  <RenderImage />
-                </Grid>
-              ) : (
-                <Grid item xs={3} sm={1.7} md={1.2} lg={1}>
-                  <RenderImage />
-                </Grid>
-              )}
-
-              <Grid item xs={8.5} sm={8.5} md={9.5} lg={10} mt={0}>
-                <RenderPlayer />
-              </Grid>
-              {windowSize[0] > 500 ? (
-                <Grid item xs={1} sm={1} md={1} lg={1} mt={'1%'}>
-                  <PlayPause></PlayPause>
-                </Grid>
-              ) : null}
-            </Grid>
+    <Box>
+      {windowSize[0] < 600 && pathname == '/' ? (
+        <Grid container justifyContent="center" alignItems="center">
+          <Grid item>
+            <PlayPauseMobile></PlayPauseMobile>
           </Grid>
-        </CardContent>
-      </Card>
+        </Grid>
+      ) : null}
+
+      <Box sx={{ position: 'fixed', bottom: 0, width: '100%', left: '0', height: bottomHeight }}>
+        <Card sx={{ display: 'flex', backgroundColor: '#30475E', opacity: 0.9, height: '100%' }}>
+          <CardContent sx={{ width: '100vw' }}>
+            <Grid container direction="row" justifyContent="flex-start" sx={{ width: '100vw' }}>
+              <Grid item xs={12} sx={{ mt: -2, width: '100vw', ml: -2 }}>
+                <Loading />
+              </Grid>
+
+              <Grid container direction="row" justifyContent="flex-start" spacing={1}>
+                {windowSize[0] < 500 ? (
+                  <Grid item xs={3} sm={1.7} md={1.2} lg={1} sx={{ ml: '-2%', mt: '2%' }}>
+                    <RenderImage />
+                  </Grid>
+                ) : (
+                  <Grid item xs={3} sm={1.7} md={1.2} lg={1}>
+                    <RenderImage />
+                  </Grid>
+                )}
+
+                <Grid item xs={8.5} sm={8.5} md={9.5} lg={10} mt={0}>
+                  <RenderPlayer />
+                </Grid>
+                {windowSize[0] > 500 ? (
+                  <Grid item xs={1} sm={1} md={1} lg={1} mt={'1%'}>
+                    <PlayPause></PlayPause>
+                  </Grid>
+                ) : null}
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Box>
     </Box>
   );
 }

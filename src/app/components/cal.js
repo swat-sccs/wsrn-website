@@ -33,7 +33,7 @@ export default function Calendar(props) {
         plugins={[dayGridPlugin, timeGridPlugin, iCalendarPlugin, listPlugin, googleCalendarPlugin]}
         initialView={props.initialView}
         eventMinHeight={10}
-        nowIndicator={true}
+        nowIndicator={'true'}
         allDaySlot={false}
         slotEventOverlap={true}
         slotDuration={'00:30:00'}
