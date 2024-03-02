@@ -21,9 +21,10 @@ import useSWR from 'swr';
 import { PlayArrowRounded, PauseRounded, PlayArrow, Pause, Sensors } from '@mui/icons-material';
 import AudioMotionAnalyzer from 'audiomotion-analyzer';
 // @ts-ignore
-
-import IcecastMetadataPlayer from 'icecast-metadata-player';
+//import { IcecastMetadataPlayer } from 'icecast-metadata-player';
 import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
+const IcecastMetadataPlayer = dynamic(() => import('icecast-metadata-player'), { ssr: false });
 
 const moment = require('moment');
 
@@ -31,7 +32,6 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Player() {
   const pathname = usePathname();
-
   const [audio, setAudio] = useState(null);
   const [playing, setPlaying] = React.useState(false);
   const [audioLoad, setAudioLoad] = React.useState(false);
@@ -47,7 +47,7 @@ export default function Player() {
     name: 'WSRN Radio',
     endpoint: `${url}/listen`,
     codec: 'AAC',
-    metadataTypes: ['icy'],
+    metadataTypes: [''],
   };
 
   useEffect(() => {
@@ -56,29 +56,38 @@ export default function Player() {
 
   useEffect(() => {
     if (!audioElement) return;
-    const player = new IcecastMetadataPlayer(station.endpoint, {
-      icyDetectionTimeout: 5000,
-      enableLogging: true,
-      metadataTypes: station.metadataTypes,
-      audioElement,
-      onMetadata: (metadata) => {
-        console.log(metadata);
-      },
-    });
-    setIcecast(player);
+    const loadPlayer = async () => {
+      const { default: IcecastMetadataPlayer } = await import('icecast-metadata-player');
+      setIcecast(
+        new IcecastMetadataPlayer(station.endpoint, {
+          icyDetectionTimeout: 5000,
+          enableLogging: true,
+          metadataTypes: station.metadataTypes,
+          audioElement,
+          onMetadata: (metadata) => {
+            console.log(metadata);
+          },
+        }),
+      );
+    };
+
+    loadPlayer();
   }, [audioElement]);
 
   const {
     data: data,
     error: error,
     isLoading: isLoading,
-  } = useSWR('/api/stream', fetcher, { refreshInterval: 4000 });
+    isValidating: isValidating,
+  } = useSWR('/api/stream', fetcher, { loadingTimeout: 3000, refreshInterval: 4000 });
 
   const {
     data: showName,
     error: showName_error,
     isLoading: showName_isLoading,
+    isValidating: showName_isValidating,
   } = useSWR('/api/states', fetcher, {
+    loadingTimeout: 3000,
     refreshInterval: 2000,
   });
 
@@ -141,13 +150,13 @@ export default function Player() {
   };
 
   const RenderPlayer = () => {
-    if (showName_isLoading || (isLoading && !error && !showName_error)) {
+    if (showName_isLoading || (isLoading && !error && !showName_error && !showName_isValidating)) {
       return (
         <Box sx={{ minWidth: '20vw' }}>
           <CircularProgress />
         </Box>
       );
-    } else if (!isLoading && !error && !showName_isLoading && showName.show && showName.switch) {
+    } else if (!isLoading && !error && !showName_isValidating && !showName_isLoading) {
       if (showName.Show != 'NA' && showName.switch == 'B') {
         return (
           <>
@@ -185,21 +194,20 @@ export default function Player() {
           </>
         );
       }
-    } else {
-      return (
-        <>
-          &nbsp;
-          <Chip
-            label={1}
-            style={{ backgroundColor: '#223547' }}
-            icon={<Headphones sx={{ height: 20, width: 20 }} />}
-          ></Chip>
-          <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
-            WSRN Archives
-          </Typography>
-        </>
-      );
     }
+    return (
+      <>
+        &nbsp;
+        <Chip
+          label={1}
+          style={{ backgroundColor: '#223547' }}
+          icon={<Headphones sx={{ height: 20, width: 20 }} />}
+        ></Chip>
+        <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
+          WSRN Archives
+        </Typography>
+      </>
+    );
   };
 
   const RenderImage = () => {
