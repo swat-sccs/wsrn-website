@@ -20,11 +20,7 @@ import { Headphones } from '@mui/icons-material';
 import useSWR from 'swr';
 import { PlayArrowRounded, PauseRounded, PlayArrow, Pause, Sensors } from '@mui/icons-material';
 import AudioMotionAnalyzer from 'audiomotion-analyzer';
-// @ts-ignore
-//import { IcecastMetadataPlayer } from 'icecast-metadata-player';
 import { usePathname } from 'next/navigation';
-import dynamic from 'next/dynamic';
-const IcecastMetadataPlayer = dynamic(() => import('icecast-metadata-player'), { ssr: false });
 
 const moment = require('moment');
 
@@ -58,6 +54,7 @@ export default function Player() {
     if (!audioElement) return;
     const loadPlayer = async () => {
       const { default: IcecastMetadataPlayer } = await import('icecast-metadata-player');
+
       setIcecast(
         new IcecastMetadataPlayer(station.endpoint, {
           icyDetectionTimeout: 5000,
@@ -70,7 +67,6 @@ export default function Player() {
         }),
       );
     };
-
     loadPlayer();
   }, [audioElement]);
 
@@ -79,7 +75,7 @@ export default function Player() {
     error: error,
     isLoading: isLoading,
     isValidating: isValidating,
-  } = useSWR('/api/stream', fetcher, { loadingTimeout: 3000, refreshInterval: 4000 });
+  } = useSWR('/api/stream', fetcher, { refreshInterval: 4000 });
 
   const {
     data: showName,
@@ -87,7 +83,6 @@ export default function Player() {
     isLoading: showName_isLoading,
     isValidating: showName_isValidating,
   } = useSWR('/api/states', fetcher, {
-    loadingTimeout: 3000,
     refreshInterval: 2000,
   });
 
@@ -150,13 +145,13 @@ export default function Player() {
   };
 
   const RenderPlayer = () => {
-    if (showName_isLoading || (isLoading && !error && !showName_error && !showName_isValidating)) {
+    if (showName_isLoading || (isLoading && !error && !showName_error)) {
       return (
         <Box sx={{ minWidth: '20vw' }}>
           <CircularProgress />
         </Box>
       );
-    } else if (!isLoading && !error && !showName_isValidating && !showName_isLoading) {
+    } else if (!isLoading && !error && !showName_isLoading) {
       if (showName.Show != 'NA' && showName.switch == 'B') {
         return (
           <>
