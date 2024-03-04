@@ -34,7 +34,7 @@ export default function Player() {
   const [currentShow, setCurrentShow] = React.useState(false);
   const [windowSize, setWindowSize] = React.useState([]);
   const [icecast, setIcecast] = useState();
-  const [audioElement, setAudioElement] = useState(null);
+  const [audioElement, setAudioElement] = React.useState(null);
   const [audioContext, setAudioContext] = useState(null);
   const [metadata, setMetadata] = useState(null);
   const [bottomHeight, setBottomHeight] = React.useState('15vh');
@@ -43,7 +43,7 @@ export default function Player() {
     name: 'WSRN Radio',
     endpoint: `${url}/listen`,
     codec: 'AAC',
-    metadataTypes: [''],
+    metadataTypes: [],
   };
 
   useEffect(() => {
@@ -57,6 +57,7 @@ export default function Player() {
 
       setIcecast(
         new IcecastMetadataPlayer(station.endpoint, {
+          crossorigin: 'anonymous',
           icyDetectionTimeout: 5000,
           enableLogging: true,
           metadataTypes: station.metadataTypes,
@@ -74,14 +75,12 @@ export default function Player() {
     data: data,
     error: error,
     isLoading: isLoading,
-    isValidating: isValidating,
   } = useSWR('/api/stream', fetcher, { refreshInterval: 4000 });
 
   const {
     data: showName,
     error: showName_error,
     isLoading: showName_isLoading,
-    isValidating: showName_isValidating,
   } = useSWR('/api/states', fetcher, {
     refreshInterval: 2000,
   });
@@ -171,6 +170,29 @@ export default function Player() {
             </Typography>
             <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
               {showName.Show}
+            </Typography>
+          </>
+        );
+      }
+      if (showName.Show == 'NA' && showName.switch == 'B') {
+        return (
+          <>
+            <Typography component="div" variant="h6" overflow="hidden">
+              <Chip
+                label="LIVE"
+                style={{ backgroundColor: '#F05454' }}
+                icon={<Sensors sx={{ height: 20, width: 20 }} />}
+              ></Chip>
+              &nbsp; &nbsp;
+              <Chip
+                label={data.source.listeners}
+                style={{ backgroundColor: '#223547' }}
+                icon={<Headphones sx={{ height: 20, width: 20 }} />}
+              ></Chip>
+              &nbsp;
+            </Typography>
+            <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
+              WSRN Radio Live
             </Typography>
           </>
         );
