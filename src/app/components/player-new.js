@@ -158,7 +158,7 @@ export default function Player() {
             <Typography
               component="div"
               variant="h6"
-              overflow="hidden"
+              overflow="auto"
               sx={{ fontFamily: 'Serif', mt: '1%' }}
             >
               {showName.Show}
@@ -174,7 +174,7 @@ export default function Player() {
               <Headphones sx={{ height: 20, width: 20 }} /> {data.source.listeners}
               &nbsp;
             </Typography>
-            <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
+            <Typography component="div" variant="h6" overflow="auto" sx={{ mt: '1%' }}>
               WSRN Radio Live
             </Typography>
           </>
@@ -184,7 +184,7 @@ export default function Player() {
           <>
             &nbsp;
             <Headphones sx={{ height: 20, width: 20 }} /> {data.source.listeners}
-            <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
+            <Typography component="div" variant="h6" overflow="auto" sx={{ mt: '1%' }}>
               {data.source.title}
             </Typography>
           </>
@@ -269,14 +269,6 @@ export default function Player() {
 
   return (
     <Box>
-      {windowSize[0] < 600 && pathname == '/' ? (
-        <Grid container justifyContent="center" alignItems="center">
-          <Grid item>
-            <PlayPauseMobile></PlayPauseMobile>
-          </Grid>
-        </Grid>
-      ) : null}
-
       <Box
         sx={{
           position: 'fixed',
@@ -302,13 +294,17 @@ export default function Player() {
                 alignItems="center"
                 spacing={1}
               >
-                {windowSize[0] > 500 ? (
-                  <Grid item xs={1} sm={1} md={1} lg={1}>
+                {windowSize[0] < 600 ? (
+                  <Grid item xs={'auto'} lg={'auto'} sx={{ ml: '-15%' }}>
                     <PlayPauseComponent></PlayPauseComponent>
                   </Grid>
-                ) : null}
+                ) : (
+                  <Grid item xs={'auto'} lg={'auto'}>
+                    <PlayPauseComponent></PlayPauseComponent>
+                  </Grid>
+                )}
 
-                <Grid item xs={4} mt={0}>
+                <Grid item xs={8} lg={'auto'} mt={0}>
                   <RenderPlayer />
                 </Grid>
               </Grid>

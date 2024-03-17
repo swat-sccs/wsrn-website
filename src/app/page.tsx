@@ -86,15 +86,27 @@ export default function Home() {
     <Upcoming></Upcoming>
     
   */}
-        <Grid container>
-          <Grid item xs={6}>
-            <About />
-          </Grid>
+        {windowSize[0] > 600 ? (
+          <Grid container item>
+            <Grid item xs={6}>
+              <About />
+            </Grid>
 
-          <Grid item xs={6}>
-            <Calendar />
+            <Grid item xs={6}>
+              <Calendar />
+            </Grid>
           </Grid>
-        </Grid>
+        ) : null}
+        {windowSize[0] < 600 ? (
+          <Grid container item>
+            <Grid item xs={12}>
+              <Calendar />
+            </Grid>
+            <Grid item xs={12} sx={{ mb: '50%' }}>
+              <About />
+            </Grid>
+          </Grid>
+        ) : null}
       </Grid>
     </Box>
   );

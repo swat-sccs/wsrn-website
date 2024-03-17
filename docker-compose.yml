@@ -4,6 +4,8 @@ services:
   wsrn:
     init: true
     restart: unless-stopped
+    volumes:
+      - ./public/archive:/app/public/archive
     build:
       context: .
       dockerfile: ./Dockerfile

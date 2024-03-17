@@ -59,31 +59,9 @@ export default function CalendarPage() {
     refreshInterval: 2000,
   });
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-  const handleClick2 = () => {
-    setOpen2(!open);
-  };
-
-  const handleSearch = (event: any) => {
-    setSearch(event.target.value);
-  };
-
-  const handleChange = (event: any) => {
-    setSearchCategory(event.target.value as string);
-  };
-
   React.useEffect(() => {
     setData(require('public/list.json'));
   }, []);
-
-  function contains(value: string) {
-    if (value.toLowerCase().includes(search.toLowerCase())) {
-      return true;
-    }
-    return false;
-  }
 
   const RenderGenres = (props: any) => {
     let thing = props.genre.split(',');
@@ -133,10 +111,7 @@ export default function CalendarPage() {
           <ListItem key={item} sx={{ background: 'rgba(255,255,255,0.2)' }}>
             <Typography variant="body2">{item}</Typography>
             <audio controls title={item}>
-              <source
-                src={decodeURI(path.join('/archive/', selectedSeason, selectedShow, item))}
-                type="audio/mp3"
-              />
+              <source src={decodeURI(path.join('/archive/', selectedSeason, selectedShow, item))} />
             </audio>
           </ListItem>,
         ),
