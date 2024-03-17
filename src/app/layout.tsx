@@ -18,13 +18,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
-
+      <link rel="icon" href="favicon.ico" sizes="any" />
       <head />
       <body>
         <ThemeRegistry options={{ key: 'mui' }}>
-          <Header></Header>
-          <link rel="icon" href="favicon.ico" sizes="any" />
           {children}
+
           <Player></Player>
         </ThemeRegistry>
       </body>

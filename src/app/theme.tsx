@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles';
-import { Urbanist } from 'next/font/google';
-
-const font = Urbanist({ subsets: ['latin'], weight: ['400'] });
+import { Noto_Serif } from 'next/font/google';
+const font = Noto_Serif({ weight: ['300'], subsets: ['latin'] });
+import bg from '../../public/img/radio.png';
 
 declare module '@mui/material/styles' {
   interface PaletteColor {
@@ -43,9 +43,9 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: '#121212',
-          backgroundImage: `linear-gradient(180deg, #121212 30%,  #30475E 100%)`,
-          backgroundRepeat: 'no-repeat',
+          backgroundColor: '#30475E',
+          //backgroundImage: `url(${bg.src})`,
+          backgroundSize: 'contain',
           backgroundAttachment: 'fixed',
         },
       },

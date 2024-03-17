@@ -128,17 +128,13 @@ export default function Player() {
     if (!playing) {
       return (
         <>
-          <Fab onClick={() => togglePlaying()} aria-label="Play" variant="outlined" color="primary">
-            <PlayArrow sx={{ height: 50, width: 50 }} />
-          </Fab>
+          <PlayArrow onClick={() => togglePlaying()} sx={{ height: 100, width: 100 }} />
         </>
       );
     }
     return (
       <>
-        <Fab onClick={() => togglePlaying()} variant="outlined" color="primary" aria-label="Pause">
-          <Pause sx={{ height: 50, width: 50 }} />
-        </Fab>
+        <Pause onClick={() => togglePlaying()} sx={{ height: 100, width: 100 }} />
       </>
     );
   };
@@ -155,20 +151,16 @@ export default function Player() {
         return (
           <>
             <Typography component="div" variant="h6" overflow="hidden">
-              <Chip
-                label="LIVE"
-                style={{ backgroundColor: '#F05454' }}
-                icon={<Sensors sx={{ height: 20, width: 20 }} />}
-              ></Chip>
-              &nbsp; &nbsp;
-              <Chip
-                label={data.source.listeners}
-                style={{ backgroundColor: '#223547' }}
-                icon={<Headphones sx={{ height: 20, width: 20 }} />}
-              ></Chip>
+              <Sensors sx={{ height: 20, width: 20 }} /> LIVE &nbsp; &nbsp;
+              <Headphones sx={{ height: 20, width: 20 }} /> {data.source.listeners}
               &nbsp;
             </Typography>
-            <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
+            <Typography
+              component="div"
+              variant="h6"
+              overflow="hidden"
+              sx={{ fontFamily: 'Serif', mt: '1%' }}
+            >
               {showName.Show}
             </Typography>
           </>
@@ -178,17 +170,8 @@ export default function Player() {
         return (
           <>
             <Typography component="div" variant="h6" overflow="hidden">
-              <Chip
-                label="LIVE"
-                style={{ backgroundColor: '#F05454' }}
-                icon={<Sensors sx={{ height: 20, width: 20 }} />}
-              ></Chip>
-              &nbsp; &nbsp;
-              <Chip
-                label={data.source.listeners}
-                style={{ backgroundColor: '#223547' }}
-                icon={<Headphones sx={{ height: 20, width: 20 }} />}
-              ></Chip>
+              <Sensors sx={{ height: 20, width: 20 }} /> LIVE &nbsp; &nbsp;
+              <Headphones sx={{ height: 20, width: 20 }} /> {data.source.listeners}
               &nbsp;
             </Typography>
             <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
@@ -200,11 +183,7 @@ export default function Player() {
         return (
           <>
             &nbsp;
-            <Chip
-              label={data.source.listeners}
-              style={{ backgroundColor: '#223547' }}
-              icon={<Headphones sx={{ height: 20, width: 20 }} />}
-            ></Chip>
+            <Headphones sx={{ height: 20, width: 20 }} /> {data.source.listeners}
             <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
               {data.source.title}
             </Typography>
@@ -298,33 +277,40 @@ export default function Player() {
         </Grid>
       ) : null}
 
-      <Box sx={{ position: 'fixed', bottom: 0, width: '100%', left: '0', height: bottomHeight }}>
-        <Card sx={{ display: 'flex', backgroundColor: '#30475E', opacity: 0.9, height: '100%' }}>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
+          left: '0',
+          height: bottomHeight,
+          zIndex: '10',
+        }}
+      >
+        <Card sx={{ display: 'flex', backgroundColor: 'rgb(100,150,100)', height: '100%' }}>
           <CardContent sx={{ width: '100vw' }}>
-            <Grid container direction="row" justifyContent="flex-start" sx={{ width: '100vw' }}>
+            <Grid container direction="row" sx={{ width: '100vw' }}>
               <Grid item xs={12} sx={{ mt: -2, width: '100vw', ml: -2 }}>
                 <Loading />
               </Grid>
 
-              <Grid container direction="row" justifyContent="flex-start" spacing={1}>
-                {windowSize[0] < 500 ? (
-                  <Grid item xs={3} sm={1.7} md={1.2} lg={1} sx={{ ml: '-2%', mt: '2%' }}>
-                    <RenderImage />
-                  </Grid>
-                ) : (
-                  <Grid item xs={3} sm={1.7} md={1.2} lg={1}>
-                    <RenderImage />
-                  </Grid>
-                )}
-
-                <Grid item xs={8.5} sm={8.5} md={9.5} lg={10} mt={0}>
-                  <RenderPlayer />
-                </Grid>
+              <Grid
+                container
+                item
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
                 {windowSize[0] > 500 ? (
-                  <Grid item xs={1} sm={1} md={1} lg={1} mt={'1%'}>
+                  <Grid item xs={1} sm={1} md={1} lg={1}>
                     <PlayPauseComponent></PlayPauseComponent>
                   </Grid>
                 ) : null}
+
+                <Grid item xs={4} mt={0}>
+                  <RenderPlayer />
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

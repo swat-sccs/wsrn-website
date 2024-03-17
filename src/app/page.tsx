@@ -1,28 +1,15 @@
 'use client';
 import React, { useState } from 'react';
 import { Container, Grid, Typography, Box, Fab, Card } from '@mui/material';
-import { Russo_One } from 'next/font/google';
 import { PlayArrowRounded, PauseRounded, Sensors } from '@mui/icons-material';
-import useSWR from 'swr';
 import Upcoming from '@/app/components/upcoming.js';
-
-const russo = Russo_One({ subsets: ['latin'], weight: ['400'] });
-
+import About from '@/app/components/about';
+import Calendar from '@/app/components/calendar';
 export default function Home() {
-  const fetcher = (url: any) => fetch(url).then((res) => res.json());
-
   const [windowSize, setWindowSize]: any[] = React.useState([]);
   const [audio, setAudio]: any[] = useState(null);
   const [playing, setPlaying] = React.useState(false);
   const [audioLoad, setAudioLoad] = React.useState(false);
-
-  const {
-    data: showName,
-    error: showName_error,
-    isLoading: showName_isLoading,
-  } = useSWR('/api/states', fetcher, {
-    refreshInterval: 2000,
-  });
 
   React.useEffect(() => {
     setWindowSize([window.innerWidth, window.innerHeight]);
@@ -74,41 +61,41 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Russo One"></link>
-      <Container>
-        <Grid container direction="column" justifyContent="flex-start" alignItems="center">
-          <Grid item>
-            <Typography
-              style={{ fontFamily: 'Russo One', color: '#EDF2F4' }}
-              variant="h1"
-              sx={{ mt: '10%' }}
-            >
-              WSRN
-            </Typography>
+    <Box>
+      <Grid
+        container
+        direction="column"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        sx={{ ml: '2%', width: '98%' }}
+      >
+        <Grid item>
+          <Typography
+            style={{ fontFamily: 'Serif', color: '#EDF2F4' }}
+            variant="h1"
+            sx={{ mt: '2%' }}
+          >
+            WSRN
+          </Typography>
 
-            <Typography style={{ color: '#EDF2F4' }} variant="body1">
-              Worldwide · Swarthmore · Radio · Network
-            </Typography>
-          </Grid>
-          {/*
+          <Typography style={{ fontFamily: 'Serif', color: '#EDF2F4' }} variant="body1">
+            Worldwide · Swarthmore · Radio · Network
+          </Typography>
+        </Grid>
+        {/*
     <Upcoming></Upcoming>
     
   */}
-        </Grid>
-      </Container>
-    </div>
+        <Grid container>
+          <Grid item xs={6}>
+            <About />
+          </Grid>
 
-    /*
-      <Calendar
-    initialView="dayGrid"
-    height="40vh"
-    toolBar={{
-      right: '',
-      center: '',
-      left: '',
-    }}
-  />
-  */
+          <Grid item xs={6}>
+            <Calendar />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
