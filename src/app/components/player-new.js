@@ -36,14 +36,15 @@ export default function Player() {
   const [icecast, setIcecast] = useState();
   const [audioElement, setAudioElement] = React.useState(null);
   const [audioContext, setAudioContext] = useState(null);
-  const [metadata, setMetadata] = useState(null);
   const [bottomHeight, setBottomHeight] = React.useState('15vh');
+  const [STREAM, setSTREAM] = React.useState({ title: 'NA' });
+
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
   const station = {
     name: 'WSRN Radio',
-    endpoint: `${url}/listen.mp3`,
+    endpoint: `${url}/archive.mp3`,
     enableCodecUpdate: true,
-    metadataTypes: [],
+    metadataTypes: ['icy'],
   };
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export default function Player() {
   useEffect(() => {
     if (!audioElement) return;
     const loadPlayer = async () => {
-      const { default: IcecastMetadataPlayer } = await import('icecast-metadata-player');
+      const { default: IcecastMetadataPlayer } = await import(`icecast-metadata-player`);
 
       setIcecast(
         new IcecastMetadataPlayer(station.endpoint, {
@@ -63,17 +64,23 @@ export default function Player() {
           metadataTypes: station.metadataTypes,
           audioElement: audioElement,
           endpoints: station.endpoints,
+          onMetadata: async (metadata) => {
+            //STREAM.title = metadata.StreamTitle;
+            setSTREAM({ title: metadata.StreamTitle });
+
+            console.log(metadata);
+          },
           onError: (message, error) => {
             console.log(message, error);
           },
           onRetry: () => {
-            console.log('RETRYING');
+            console.log('Connection Lost.. Retrying');
           },
           onWarn: (message) => {
             console.log(message);
           },
           onStreamEnd: () => {
-            console.log('ENDED');
+            console.log('Stream Ended');
           },
         }),
       );
@@ -94,11 +101,9 @@ export default function Player() {
   } = useSWR('/api/states', fetcher, {
     refreshInterval: 2000,
   });
-  //player.detachAudioElement()
 
   const togglePlaying = useCallback(() => {
     if (!audioContext) {
-      console.log('OH NO');
       const _audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
       const source = _audioContext.createMediaElementSource(audioElement);
@@ -168,27 +173,27 @@ export default function Player() {
         </Box>
       );
     } else if (!isLoading && !error && !showName_isLoading) {
-      let STREAM = {};
-
-      if (isIterable(data.source)) {
-        if (data.source[1].hasOwnProperty('server_name')) {
-          STREAM = data.source[1];
-        } else {
-          STREAM = data.source[0];
-        }
+      //If metadata is found try and look for the rest of the data
+      let metadata = {};
+      if (STREAM.title != 'NA') {
+        metadata = data.source.filter((source) => source.title == STREAM.title)[0];
       } else {
-        STREAM = data.source;
+        //Guess
+        metadata = { title: 'Listen to WSRN!', listeners: 0 };
       }
+
+      console.log(metadata);
 
       if (showName.Show != 'NA' && showName.switch == 'B') {
         return (
           <>
             <Typography component="div" variant="h6" overflow="hidden">
               <Sensors sx={{ height: 20, width: 20 }} /> LIVE &nbsp; &nbsp;
-              <Headphones sx={{ height: 20, width: 20 }} /> {STREAM.listeners}
+              <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
               &nbsp;
             </Typography>
             <Typography variant="h6" overflow="auto" sx={{ fontFamily: 'Serif', mt: '1%' }}>
+              {metadata.title}
               {showName.Show}
             </Typography>
           </>
@@ -199,7 +204,7 @@ export default function Player() {
           <>
             <Typography component="div" variant="h6" overflow="hidden">
               <Sensors sx={{ height: 20, width: 20 }} /> LIVE &nbsp; &nbsp;
-              <Headphones sx={{ height: 20, width: 20 }} /> {STREAM.listeners}
+              <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
               &nbsp;
             </Typography>
             <Typography component="div" variant="h6" overflow="auto" sx={{ mt: '1%' }}>
@@ -211,9 +216,9 @@ export default function Player() {
         return (
           <>
             &nbsp;
-            <Headphones sx={{ height: 20, width: 20 }} /> {STREAM.listeners}
+            <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
             <Typography variant="h6" overflow="auto" sx={{ mt: '1%' }}>
-              {STREAM.title}
+              {metadata.title}
             </Typography>
           </>
         );
@@ -222,11 +227,6 @@ export default function Player() {
     return (
       <>
         &nbsp;
-        <Chip
-          label={1}
-          style={{ backgroundColor: '#223547' }}
-          icon={<Headphones sx={{ height: 20, width: 20 }} />}
-        ></Chip>
         <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
           WSRN Archives
         </Typography>
