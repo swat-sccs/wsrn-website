@@ -41,8 +41,8 @@ export default function Player() {
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
   const station = {
     name: 'WSRN Radio',
-    endpoint: `${url}/listen`,
-    codec: 'AAC',
+    endpoint: `${url}/live`,
+    enableCodecUpdate: true,
     metadataTypes: [],
   };
 
@@ -62,9 +62,6 @@ export default function Player() {
           enableLogging: true,
           metadataTypes: station.metadataTypes,
           audioElement,
-          onMetadata: (metadata) => {
-            console.log(metadata);
-          },
         }),
       );
     };
@@ -138,6 +135,13 @@ export default function Player() {
       </>
     );
   };
+  function isIterable(obj) {
+    // checks for null and undefined
+    if (obj == null) {
+      return false;
+    }
+    return typeof obj[Symbol.iterator] === 'function';
+  }
 
   const RenderPlayer = () => {
     if (showName_isLoading || (isLoading && !error && !showName_error)) {
@@ -147,12 +151,20 @@ export default function Player() {
         </Box>
       );
     } else if (!isLoading && !error && !showName_isLoading) {
+      let STREAM = {};
+
+      if (isIterable(data.source)) {
+        STREAM = data.source[1];
+      } else {
+        STREAM = data.source;
+      }
+
       if (showName.Show != 'NA' && showName.switch == 'B') {
         return (
           <>
             <Typography component="div" variant="h6" overflow="hidden">
               <Sensors sx={{ height: 20, width: 20 }} /> LIVE &nbsp; &nbsp;
-              <Headphones sx={{ height: 20, width: 20 }} /> {data.source.listeners}
+              <Headphones sx={{ height: 20, width: 20 }} /> {STREAM.listeners}
               &nbsp;
             </Typography>
             <Typography
@@ -171,7 +183,7 @@ export default function Player() {
           <>
             <Typography component="div" variant="h6" overflow="hidden">
               <Sensors sx={{ height: 20, width: 20 }} /> LIVE &nbsp; &nbsp;
-              <Headphones sx={{ height: 20, width: 20 }} /> {data.source.listeners}
+              <Headphones sx={{ height: 20, width: 20 }} /> {STREAM.listeners}
               &nbsp;
             </Typography>
             <Typography component="div" variant="h6" overflow="auto" sx={{ mt: '1%' }}>
@@ -183,9 +195,9 @@ export default function Player() {
         return (
           <>
             &nbsp;
-            <Headphones sx={{ height: 20, width: 20 }} /> {data.source.listeners}
+            <Headphones sx={{ height: 20, width: 20 }} /> {STREAM.listeners}
             <Typography component="div" variant="h6" overflow="auto" sx={{ mt: '1%' }}>
-              {data.source.title}
+              {STREAM.title}
             </Typography>
           </>
         );
