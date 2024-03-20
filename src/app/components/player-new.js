@@ -53,25 +53,6 @@ export default function Player() {
   }, []);
 
   useEffect(() => {
-    //If metadata is found try and look for the rest of the data
-    let _metadata = { title: 'Listen to WSRN!', listeners: 0 };
-    if (STREAM) {
-      _metadata = data.source.find((source) => source.title == STREAM);
-      if (!_metadata) {
-        _metadata = { title: 'Listen to WSRN!', listeners: 0 };
-      }
-    }
-    console.log(_metadata);
-
-    if (_metadata.hasOwnProperty('listeners')) {
-      setMetadata(_metadata);
-    } else {
-      _metadata['listeners'] = 0;
-      setMetadata(_metadata);
-    }
-  }, [STREAM]);
-
-  useEffect(() => {
     if (!audioElement) return;
     const loadPlayer = async () => {
       const { default: IcecastMetadataPlayer } = await import(`icecast-metadata-player`);
@@ -119,6 +100,25 @@ export default function Player() {
   } = useSWR('/api/states', fetcher, {
     refreshInterval: 2000,
   });
+
+  useEffect(() => {
+    //If metadata is found try and look for the rest of the data
+    let _metadata = { title: 'Listen to WSRN!', listeners: 0 };
+    if (STREAM) {
+      _metadata = data.source.find((source) => source.title == STREAM);
+      if (!_metadata) {
+        _metadata = { title: 'Listen to WSRN!', listeners: 0 };
+      }
+    }
+    console.log(_metadata);
+
+    if (_metadata.hasOwnProperty('listeners')) {
+      setMetadata(_metadata);
+    } else {
+      _metadata['listeners'] = 0;
+      setMetadata(_metadata);
+    }
+  }, [STREAM, data]);
 
   const togglePlaying = useCallback(() => {
     if (!audioContext) {
