@@ -41,7 +41,7 @@ export default function Player() {
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
   const station = {
     name: 'WSRN Radio',
-    endpoint: `${url}/listen`,
+    endpoint: `${url}/listen.mp3`,
     enableCodecUpdate: true,
     metadataTypes: [],
   };
@@ -98,6 +98,7 @@ export default function Player() {
 
   const togglePlaying = useCallback(() => {
     if (!audioContext) {
+      console.log('OH NO');
       const _audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
       const source = _audioContext.createMediaElementSource(audioElement);
@@ -112,7 +113,9 @@ export default function Player() {
       setPlaying(true);
     }
 
-    if (!icecast) return;
+    if (!icecast) {
+      return;
+    }
 
     if (playing) {
       icecast.stop();
