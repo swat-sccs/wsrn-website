@@ -41,7 +41,7 @@ export default function Player() {
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
   const station = {
     name: 'WSRN Radio',
-    endpoint: `${url}/live`,
+    endpoint: `${url}/listen`,
     enableCodecUpdate: true,
     metadataTypes: [],
   };
@@ -61,7 +61,20 @@ export default function Player() {
           icyDetectionTimeout: 5000,
           enableLogging: true,
           metadataTypes: station.metadataTypes,
-          audioElement,
+          audioElement: audioElement,
+          endpoints: station.endpoints,
+          onError: (message, error) => {
+            console.log(message, error);
+          },
+          onRetry: () => {
+            console.log('RETRYING');
+          },
+          onWarn: (message) => {
+            console.log(message);
+          },
+          onStreamEnd: () => {
+            console.log('ENDED');
+          },
         }),
       );
     };
@@ -81,6 +94,7 @@ export default function Player() {
   } = useSWR('/api/states', fetcher, {
     refreshInterval: 2000,
   });
+  //player.detachAudioElement()
 
   const togglePlaying = useCallback(() => {
     if (!audioContext) {
@@ -154,7 +168,11 @@ export default function Player() {
       let STREAM = {};
 
       if (isIterable(data.source)) {
-        STREAM = data.source[1];
+        if (data.source[1].hasOwnProperty('server_name')) {
+          STREAM = data.source[1];
+        } else {
+          STREAM = data.source[0];
+        }
       } else {
         STREAM = data.source;
       }
@@ -167,12 +185,7 @@ export default function Player() {
               <Headphones sx={{ height: 20, width: 20 }} /> {STREAM.listeners}
               &nbsp;
             </Typography>
-            <Typography
-              component="div"
-              variant="h6"
-              overflow="auto"
-              sx={{ fontFamily: 'Serif', mt: '1%' }}
-            >
+            <Typography variant="h6" overflow="auto" sx={{ fontFamily: 'Serif', mt: '1%' }}>
               {showName.Show}
             </Typography>
           </>
@@ -196,7 +209,7 @@ export default function Player() {
           <>
             &nbsp;
             <Headphones sx={{ height: 20, width: 20 }} /> {STREAM.listeners}
-            <Typography component="div" variant="h6" overflow="auto" sx={{ mt: '1%' }}>
+            <Typography variant="h6" overflow="auto" sx={{ mt: '1%' }}>
               {STREAM.title}
             </Typography>
           </>
