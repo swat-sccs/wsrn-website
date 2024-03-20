@@ -193,7 +193,6 @@ export default function Player() {
               &nbsp;
             </Typography>
             <Typography variant="h6" overflow="auto" sx={{ fontFamily: 'Serif', mt: '1%' }}>
-              {metadata.title}
               {showName.Show}
             </Typography>
           </>
