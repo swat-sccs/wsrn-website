@@ -42,7 +42,7 @@ export default function Player() {
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
   const station = {
     name: 'WSRN Radio',
-    endpoint: `${url}/archive.mp3`,
+    endpoint: `${url}/listen.mp3`,
     enableCodecUpdate: true,
     metadataTypes: ['icy'],
   };
