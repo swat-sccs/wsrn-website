@@ -37,7 +37,8 @@ export default function Player() {
   const [audioElement, setAudioElement] = React.useState(null);
   const [audioContext, setAudioContext] = useState(null);
   const [bottomHeight, setBottomHeight] = React.useState('15vh');
-  const [STREAM, setSTREAM] = React.useState({ title: 'NA' });
+  const [STREAM, setSTREAM] = React.useState(null);
+  const [metadata, setMetadata] = React.useState({ title: 'Listen to WSRN!', listeners: 0 });
 
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
   const station = {
@@ -50,6 +51,25 @@ export default function Player() {
   useEffect(() => {
     setAudioElement(new Audio());
   }, []);
+
+  useEffect(() => {
+    //If metadata is found try and look for the rest of the data
+    let _metadata = { title: 'Listen to WSRN!', listeners: 0 };
+    if (STREAM) {
+      _metadata = data.source.find((source) => source.title == STREAM);
+      if (!_metadata) {
+        _metadata = { title: 'Listen to WSRN!', listeners: 0 };
+      }
+    }
+    console.log(_metadata);
+
+    if (_metadata.hasOwnProperty('listeners')) {
+      setMetadata(_metadata);
+    } else {
+      _metadata['listeners'] = 0;
+      setMetadata(_metadata);
+    }
+  }, [STREAM]);
 
   useEffect(() => {
     if (!audioElement) return;
@@ -66,9 +86,7 @@ export default function Player() {
           endpoints: station.endpoints,
           onMetadata: async (metadata) => {
             //STREAM.title = metadata.StreamTitle;
-            setSTREAM({ title: metadata.StreamTitle });
-
-            console.log(metadata);
+            setSTREAM(metadata.StreamTitle);
           },
           onError: (message, error) => {
             console.log(message, error);
@@ -173,17 +191,6 @@ export default function Player() {
         </Box>
       );
     } else if (!isLoading && !error && !showName_isLoading) {
-      //If metadata is found try and look for the rest of the data
-      let metadata = {};
-      if (STREAM.title != 'NA') {
-        metadata = data.source.filter((source) => source.title == STREAM.title)[0];
-      } else {
-        //Guess
-        metadata = { title: 'Listen to WSRN!', listeners: 0 };
-      }
-
-      console.log(metadata);
-
       if (showName.Show != 'NA' && showName.switch == 'B') {
         return (
           <>
