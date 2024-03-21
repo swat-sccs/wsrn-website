@@ -293,6 +293,11 @@ export default function Player() {
     }
   };
 
+  const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
+
   React.useEffect(() => {
     //setAudio(new Audio('https://icecast.wsrn.sccs.swarthmore.edu/listen'));
     setWindowSize([window.innerWidth, window.innerHeight]);
@@ -313,6 +318,14 @@ export default function Player() {
           zIndex: '10',
         }}
       >
+        <Typography
+          sx={{ position: 'absolute', bottom: 0, right: 0, mr: '1%', mb: '1%' }}
+          onClick={() => openInNewTab('https://publicfiles.fcc.gov/fm-profile/wsrn-fm')}
+          variant="body1"
+          style={{ cursor: 'pointer' }}
+        >
+          FCC Pubilc File
+        </Typography>
         <Card sx={{ display: 'flex', backgroundColor: 'rgb(100,150,100)', height: '100%' }}>
           <CardContent sx={{ width: '100vw' }}>
             <Grid container direction="row" sx={{ width: '100vw' }}>

@@ -1,10 +1,12 @@
 'use client';
 import React, { useState } from 'react';
 import { Container, Grid, Typography, Box, Fab, Card } from '@mui/material';
-import { PlayArrowRounded, PauseRounded, Sensors } from '@mui/icons-material';
+import { PlayArrowRounded, PauseRounded, Inventory } from '@mui/icons-material';
 import Upcoming from '@/app/components/upcoming.js';
 import About from '@/app/components/about';
 import Calendar from '@/app/components/calendar';
+import Link from 'next/link';
+
 export default function Home() {
   const [windowSize, setWindowSize]: any[] = React.useState([]);
   const [audio, setAudio]: any[] = useState(null);
@@ -62,6 +64,12 @@ export default function Home() {
 
   return (
     <Box>
+      <Link href="/archives" passHref style={{ textDecoration: 'none' }}>
+        <Inventory
+          sx={{ position: 'absolute', top: 0, right: 0, mt: '2%', mr: '2%', color: 'white' }}
+          fontSize="large"
+        ></Inventory>
+      </Link>
       <Grid
         container
         direction="column"
