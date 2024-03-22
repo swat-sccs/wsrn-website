@@ -13,19 +13,19 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
     success: {
-      main: '#C2EC7E',
+      main: '#31572C',
     },
     primary: {
-      main: '#F05454',
+      main: '#7798AB',
     },
     secondary: {
-      main: '#f46523',
+      main: '#649664',
     },
     warning: {
-      main: '#F05454',
+      main: '#EE964B',
     },
     error: {
-      main: '#86001a',
+      main: '#E13F47',
     },
   },
   shape: {
@@ -61,4 +61,10 @@ const theme = createTheme({
 
 export default theme;
 
-//https://colorhunt.co/palette/f5f5f5f0545430475e121212
+//https://coolors.co/31572c-30475e-7798ab-649664-ee964b
+
+//Green:#31572C
+//Blue: #30475E
+//LightBlue: #7798AB
+//LightGreen: #C3DBC5
+//Orange:

@@ -11,8 +11,8 @@ import {
   CardMedia,
   Button,
   CardHeader,
-  TextField,
-  InputAdornment,
+  InputLabel,
+  FormControl,
   Box,
   Divider,
   Select,
@@ -23,7 +23,7 @@ import {
   ListItemButton,
   ListItemText,
   ListItemIcon,
-  Collapse,
+  SelectChangeEvent,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -33,6 +33,7 @@ import axios from 'axios';
 import useSWR from 'swr';
 import path from 'path';
 import logo2 from '../../../img/wsrn2.png';
+import styles from './page.module.css';
 
 import { Category } from '@mui/icons-material';
 import { arch } from 'os';
@@ -48,6 +49,18 @@ export default function CalendarPage() {
   const [selectedSeason, setSelectedSeason] = useState('18-fall');
   const [selectedShow, setSelectedShow] = useState('');
   const [data, setData] = useState<any>();
+  const [playing, setPlaying] = useState<any>(false);
+  const [windowSize, setWindowSize] = useState<any>([]);
+  const [shows, setShows] = React.useState('');
+  const [select_open, set_select_open] = React.useState(true);
+  const [selectedYear, setSelectedYear] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectedShow(event.target.value);
+  };
+  const handleYearChange = (event: SelectChangeEvent) => {
+    setSelectedYear(event.target.value);
+  };
 
   const [opens, setOpens] = React.useState<any>([]);
   const pre = '';
@@ -58,6 +71,10 @@ export default function CalendarPage() {
   } = useSWR('/api/archive', fetcher, {
     refreshInterval: 2000,
   });
+  React.useEffect(() => {
+    console.log(window.innerWidth);
+    setWindowSize([window.innerWidth, window.innerHeight]);
+  }, []);
 
   React.useEffect(() => {
     setData(require('public/list.json'));
@@ -86,6 +103,7 @@ export default function CalendarPage() {
         temp.push(
           <Grid item key={key}>
             <Button
+              fullWidth
               onClick={() => {
                 setSelectedSeason(key);
                 setSelectedShow('');
@@ -108,12 +126,24 @@ export default function CalendarPage() {
     if (!archive_isLoading && !archive_error && selectedShow) {
       archive_data[selectedSeason][selectedShow].map((item: any) =>
         temp.push(
-          <ListItem key={item} sx={{ background: 'rgba(255,255,255,0.2)' }}>
-            <Typography variant="body2">{item}</Typography>
-            <audio controls title={item}>
-              <source src={decodeURI(path.join('/archive/', selectedSeason, selectedShow, item))} />
-            </audio>
-          </ListItem>,
+          <>
+            <Divider></Divider>
+            <ListItem key={item} sx={{ background: 'rgba(255,255,255,0.1)', mb: '2%' }}>
+              <Grid container justifyContent="space-evenly" direction="row">
+                <Grid item xs={12} lg={6} sx={{ mt: 'auto', mb: 'auto' }}>
+                  <Typography variant="body1">{item}</Typography>
+                </Grid>
+
+                <Grid item xs={12} lg={6}>
+                  <audio controls title={item}>
+                    <source
+                      src={decodeURI(path.join('/archive/', selectedSeason, selectedShow, item))}
+                    />
+                  </audio>
+                </Grid>
+              </Grid>
+            </ListItem>
+          </>,
         ),
       );
     }
@@ -124,53 +154,109 @@ export default function CalendarPage() {
   const RenderShows = (props: any) => {
     let temp: any = [];
     let season = props.season;
+
     if (!archive_isLoading && !archive_error) {
       for (const show in archive_data[season]) {
         temp.push(
-          <ListItem key={show}>
+          <>
             <ListItemButton
+              key={show}
               onClick={() => setSelectedShow(show)}
-              sx={{ background: selectedShow == show ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0)' }}
+              sx={{
+                background: selectedShow == show ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0)',
+              }}
             >
               <ListItemIcon></ListItemIcon>
               <ListItemText primary={show} />
             </ListItemButton>
-          </ListItem>,
+
+            <Divider></Divider>
+          </>,
         );
       }
     }
-
     return temp;
   };
 
   return (
-    <Box>
-      <Grid
-        container
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        sx={{ ml: '2%', width: '98%', mt: '2%' }}
-      >
-        <Grid container justifyContent="space-evenly">
-          <RenderCards></RenderCards>
-        </Grid>
-        <Grid container justifyContent="center" sx={{ mt: '2%' }}>
-          <Grid item xs={4}>
-            <List sx={{ overflowY: 'auto', height: '70vh' }}>
-              <RenderShows season={selectedSeason}></RenderShows>
-            </List>
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h3">Archives</Typography>
+
+      {windowSize[0] < 600 ? (
+        //Mobile
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          spacing={2}
+          alignItems="flex-start"
+          sx={{ mt: '2%' }}
+        >
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Year</InputLabel>
+
+              <Select
+                labelId="Year"
+                id="Year"
+                value={selectedYear}
+                label="Shows"
+                onChange={handleYearChange}
+              >
+                {!archive_isLoading
+                  ? Object.entries(archive_data).map(([key, value]) => [
+                      <MenuItem value={key}>{key}</MenuItem>,
+                    ])
+                  : null}
+              </Select>
+            </FormControl>
           </Grid>
-          <Grid item>
-            <Divider orientation="vertical"></Divider>
+          <Grid item xs={12}>
+            <FormControl fullWidth>
+              <InputLabel>Shows</InputLabel>
+
+              <Select value={selectedShow} label="Shows" onChange={handleChange}>
+                {!archive_isLoading
+                  ? Object.entries(archive_data[selectedSeason]).map(([key, value]) => [
+                      <MenuItem value={key}>{key}</MenuItem>,
+                    ])
+                  : null}
+              </Select>
+            </FormControl>
           </Grid>
-          <Grid item xs={4}>
-            <List sx={{ overflowY: 'auto', height: '70vh' }}>
+
+          <Grid item lg={6}>
+            <List sx={{ overflowY: 'auto', height: '40vh', width: '100%' }}>
               <RenderAudioFiles></RenderAudioFiles>
             </List>
           </Grid>
         </Grid>
-      </Grid>
+      ) : (
+        //laptop
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-start"
+          spacing={2}
+          alignItems="flex-start"
+          sx={{ mt: '2%' }}
+        >
+          <Grid item lg={2}>
+            <RenderCards></RenderCards>
+          </Grid>
+          <Grid item lg={4}>
+            <List sx={{ overflowY: 'auto', height: '70vh' }}>
+              <RenderShows season={selectedSeason}></RenderShows>
+            </List>
+          </Grid>
+
+          <Grid item lg={6}>
+            <List sx={{ overflowY: 'auto', height: '70vh', width: '100%' }}>
+              <RenderAudioFiles></RenderAudioFiles>
+            </List>
+          </Grid>
+        </Grid>
+      )}
     </Box>
   );
 }

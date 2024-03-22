@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Worldwide Swarthmore Radio Network',
     start_url: '/',
     display: 'standalone',
-    background_color: 'rgb(18,	18,	18	)',
-    theme_color: 'rgb(18,	18,	18	)',
+    background_color: '#30475E',
+    theme_color: '#30475E',
     icons: [
       {
         src: '/favicon.ico',

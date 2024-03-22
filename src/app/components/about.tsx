@@ -47,7 +47,7 @@ export default function About() {
                 textAlign={'right'}
               >
                 2. A blurb about the artist/music to &nbsp;
-                <Link href="mailto: wsrn-dj-owner@sccs.swarthmore.edu">
+                <Link href="mailto: wsrn-dj-owner@sccs.swarthmore.edu" style={{ color: '#EE964B' }}>
                   wsrn-dj-owner@ sccs.swarthmore.edu
                 </Link>
               </Typography>

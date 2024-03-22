@@ -20,48 +20,6 @@ export default function Home() {
     }
   }, []);
 
-  const play = () => {
-    setAudioLoad(true);
-    audio.play();
-    setPlaying(true);
-
-    audio.onplaying = async function () {
-      console.log('Metadata for audio loaded');
-      setAudioLoad(false);
-    };
-  };
-
-  const pause = () => {
-    setAudioLoad(false);
-    console.log('pausing!');
-    audio.pause();
-    setPlaying(false);
-  };
-  /*
-   <Card sx={{ width: '200px', height: '200px', borderRadius: '500px' }}>
-            <PlayArrow
-              sx={{ height: 200, width: 200, position: 'relative', top: '5%', left: '5%' }}
-            />
-          </Card>
-  */
-
-  const PlayPause = () => {
-    if (!playing) {
-      return (
-        <>
-          <PlayArrowRounded onClick={() => play()} sx={{ height: 200, width: 200 }} />
-        </>
-      );
-    }
-    if (playing) {
-      return (
-        <>
-          <PauseRounded onClick={() => pause()} sx={{ height: 200, width: 200 }} />
-        </>
-      );
-    }
-  };
-
   return (
     <Box>
       <Link href="/archives" passHref style={{ textDecoration: 'none' }}>

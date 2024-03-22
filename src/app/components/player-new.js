@@ -21,12 +21,15 @@ import useSWR from 'swr';
 import { PlayArrowRounded, PauseRounded, PlayArrow, Pause, Sensors } from '@mui/icons-material';
 import AudioMotionAnalyzer from 'audiomotion-analyzer';
 import { usePathname } from 'next/navigation';
+import { useTheme } from '@mui/material';
 
 const moment = require('moment');
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function Player() {
+  const theme = useTheme();
+  const audioElmRef = React.useRef(null);
   const pathname = usePathname();
   const [audio, setAudio] = useState(null);
   const [playing, setPlaying] = React.useState(false);
@@ -35,9 +38,11 @@ export default function Player() {
   const [windowSize, setWindowSize] = React.useState([]);
   const [icecast, setIcecast] = useState();
   const [audioElement, setAudioElement] = React.useState(null);
+  const [analyzerData, setAnalyzerData] = useState(null);
   const [audioContext, setAudioContext] = useState(null);
   const [bottomHeight, setBottomHeight] = React.useState('15vh');
   const [STREAM, setSTREAM] = React.useState(null);
+  const [_analyser, set_analyser] = React.useState(null);
   const [metadata, setMetadata] = React.useState({ title: 'Listen to WSRN!', listeners: 0 });
 
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
@@ -68,11 +73,13 @@ export default function Player() {
           onMetadata: async (metadata) => {
             //STREAM.title = metadata.StreamTitle;
             setSTREAM(metadata.StreamTitle);
+            setAudioLoad(false);
           },
           onError: (message, error) => {
             console.log(message, error);
           },
           onRetry: () => {
+            setAudioLoad(true);
             console.log('Connection Lost.. Retrying');
           },
           onWarn: (message) => {
@@ -122,18 +129,22 @@ export default function Player() {
 
   const togglePlaying = useCallback(() => {
     if (!audioContext) {
+      // create a new AudioContext
       const _audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      // create an analyzer node with a buffer size of 2048
+      const analyser = _audioContext.createAnalyser();
+      analyser.fftSize = 2048;
 
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
       const source = _audioContext.createMediaElementSource(audioElement);
+      source.connect(analyser);
       source.connect(_audioContext.destination);
-
-      const _analyser = _audioContext.createAnalyser();
-      _analyser.fftSize = 256;
-
-      source.connect(_analyser);
 
       setAudioContext(_audioContext);
       setPlaying(true);
+      //console.log(analyser);
+      setAnalyzerData({ analyser, bufferLength, dataArray });
     }
 
     if (!icecast) {
@@ -142,6 +153,7 @@ export default function Player() {
 
     if (playing) {
       icecast.stop();
+      setAudioLoad(false);
       setPlaying(false);
       return;
     }
@@ -155,7 +167,9 @@ export default function Player() {
     if (audioLoad) {
       return (
         <>
-          <LinearProgress />
+          <Box color="white">
+            <LinearProgress color="inherit" />
+          </Box>
         </>
       );
     }
@@ -175,21 +189,10 @@ export default function Player() {
       </>
     );
   };
-  function isIterable(obj) {
-    // checks for null and undefined
-    if (obj == null) {
-      return false;
-    }
-    return typeof obj[Symbol.iterator] === 'function';
-  }
 
   const RenderPlayer = () => {
     if (showName_isLoading || (isLoading && !error && !showName_error)) {
-      return (
-        <Box sx={{ minWidth: '20vw' }}>
-          <CircularProgress />
-        </Box>
-      );
+      return <Box></Box>;
     } else if (!isLoading && !error && !showName_isLoading) {
       if (showName.Show != 'NA' && showName.switch == 'B') {
         return (
@@ -302,22 +305,22 @@ export default function Player() {
     //setAudio(new Audio('https://icecast.wsrn.sccs.swarthmore.edu/listen'));
     setWindowSize([window.innerWidth, window.innerHeight]);
     if (window.innerWidth < 500) {
-      setBottomHeight('17vh');
+      setBottomHeight('16vh');
     }
   }, []);
 
   return (
-    <Box>
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          width: '100%',
-          left: '0',
-          height: bottomHeight,
-          zIndex: '10',
-        }}
-      >
+    <Box
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+        left: '0',
+        height: bottomHeight,
+        zIndex: '10',
+      }}
+    >
+      {windowSize[0] > 600 ? (
         <Typography
           sx={{ position: 'absolute', bottom: 0, right: 0, mr: '1%', mb: '1%' }}
           onClick={() => openInNewTab('https://publicfiles.fcc.gov/fm-profile/wsrn-fm')}
@@ -326,39 +329,46 @@ export default function Player() {
         >
           FCC Pubilc File
         </Typography>
-        <Card sx={{ display: 'flex', backgroundColor: 'rgb(100,150,100)', height: '100%' }}>
-          <CardContent sx={{ width: '100vw' }}>
-            <Grid container direction="row" sx={{ width: '100vw' }}>
-              <Grid item xs={12} sx={{ mt: -2, width: '100vw', ml: -2 }}>
-                <Loading />
-              </Grid>
+      ) : null}
 
-              <Grid
-                container
-                item
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={1}
-              >
-                {windowSize[0] < 600 ? (
-                  <Grid item xs={'auto'} lg={'auto'} sx={{ ml: '-15%' }}>
-                    <PlayPauseComponent></PlayPauseComponent>
-                  </Grid>
-                ) : (
-                  <Grid item xs={'auto'} lg={'auto'}>
-                    <PlayPauseComponent></PlayPauseComponent>
-                  </Grid>
-                )}
+      <Card
+        sx={{
+          display: 'flex',
+          backgroundColor: theme.palette.secondary.main,
+          height: '100%',
+          borderRadius: '10px',
+        }}
+      >
+        <CardContent>
+          <Grid container direction="row" sx={{ width: '100vw' }}>
+            <Grid item xs={12} sx={{ mt: -2, width: '100vw', ml: -2 }}>
+              <Loading />
+            </Grid>
 
-                <Grid item xs={8} lg={'auto'} mt={0}>
-                  <RenderPlayer />
+            <Grid
+              container
+              item
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+            >
+              {windowSize[0] < 600 ? (
+                <Grid item xs={3}>
+                  <PlayPauseComponent></PlayPauseComponent>
                 </Grid>
+              ) : (
+                <Grid item lg={'auto'}>
+                  <PlayPauseComponent></PlayPauseComponent>
+                </Grid>
+              )}
+              <Grid item xs={9} lg={'auto'}>
+                <RenderPlayer />
               </Grid>
             </Grid>
-          </CardContent>
-        </Card>
-      </Box>
+          </Grid>
+        </CardContent>
+      </Card>
     </Box>
   );
 }
