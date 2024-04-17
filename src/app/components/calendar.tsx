@@ -10,11 +10,11 @@ export default function CalendarPage() {
   }, []);
   return (
     <Box>
-      <Box sx={{ mt: '5%', width: '45vw' }}>
+      <Box>
         {windowSize[0] < 500 ? (
-          <Box sx={{ width: '95vw' }}>
+          <Box>
             <Calendar
-              initialView="timeGridDay"
+              initialView="listDay"
               height="45vh"
               toolBar={{
                 right: 'prev,next',
@@ -26,12 +26,12 @@ export default function CalendarPage() {
         ) : (
           <Box>
             <Calendar
-              initialView="timeGridDay"
+              initialView="listDay"
               height="60vh"
               toolBar={{
                 right: 'prev,next',
                 center: 'title',
-                left: 'timeGridDay,timeGridWeek today',
+                left: 'listDay,timeGridWeek today',
               }}
             />
           </Box>

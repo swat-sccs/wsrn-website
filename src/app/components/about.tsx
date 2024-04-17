@@ -55,7 +55,7 @@ export default function About() {
             <Grid item no-gutters>
               <Divider orientation="vertical" sx={{ backgroundColor: 'white' }} />
             </Grid>
-            <Grid item xs={6} lg={4}>
+            <Grid item xs={6} lg={3.5}>
               <Typography variant="body1" textAlign="left">
                 WSRN [Worldwide Swarthmore Radio Network] is Swarthmore College's fiercely
                 independent, student run radio station. We broadcast on 91.5 FM, and also on our

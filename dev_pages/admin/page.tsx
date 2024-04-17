@@ -1,3 +1,4 @@
+/*
 'use client';
 import Calendar from '../components/cal.js';
 import React, { useState } from 'react';
@@ -50,7 +51,7 @@ export default function CalendarPage() {
       .then((res: any) => (url = res.data))
       .catch((err: any) => console.error(err));
   };
-  */
+  
 
   React.useEffect(() => {
     Papa.parse(
@@ -196,3 +197,5 @@ export default function CalendarPage() {
     </>
   );
 }
+
+*/

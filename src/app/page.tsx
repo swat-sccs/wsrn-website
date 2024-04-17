@@ -21,59 +21,56 @@ export default function Home() {
   }, []);
 
   return (
-    <Box>
-      <Link href="/archives" passHref style={{ textDecoration: 'none' }}>
-        <Inventory
-          sx={{ position: 'absolute', top: 0, right: 0, mt: '2%', mr: '2%', color: 'white' }}
-          fontSize="large"
-        ></Inventory>
-      </Link>
-      <Grid
-        container
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        sx={{ ml: '2%', width: '98%' }}
-      >
-        <Grid item>
-          <Typography
-            style={{ fontFamily: 'Serif', color: '#EDF2F4' }}
-            variant="h1"
-            sx={{ mt: '2%' }}
-          >
-            WSRN
-          </Typography>
+    <Container sx={{ overflowX: 'hidden' }}>
+      <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start">
+        <Grid container direction="row" justifyContent="space-between" item>
+          <Grid item>
+            <Typography
+              style={{ fontFamily: 'Serif', color: '#EDF2F4' }}
+              variant="h1"
+              sx={{ mt: '2%' }}
+            >
+              WSRN
+            </Typography>
 
-          <Typography style={{ fontFamily: 'Serif', color: '#EDF2F4' }} variant="body1">
-            Worldwide · Swarthmore · Radio · Network
-          </Typography>
+            <Typography style={{ fontFamily: 'Serif', color: '#EDF2F4' }} variant="body1">
+              Worldwide · Swarthmore · Radio · Network
+            </Typography>
+          </Grid>
+          <Grid item sx={{ mt: '2%' }}>
+            <Link href="/archives" passHref style={{ textDecoration: 'none' }}>
+              <Inventory sx={{ color: 'white' }} fontSize="large"></Inventory>
+            </Link>
+          </Grid>
         </Grid>
         {/*
     <Upcoming></Upcoming>
-    
-  */}
-        {windowSize[0] > 600 ? (
-          <Grid container item>
-            <Grid item xs={6}>
-              <About />
-            </Grid>
+     */}
 
-            <Grid item xs={6}>
-              <Calendar />
-            </Grid>
-          </Grid>
-        ) : null}
-        {windowSize[0] < 600 ? (
-          <Grid container item>
-            <Grid item xs={12}>
-              <Calendar />
-            </Grid>
-            <Grid item xs={12} sx={{ mb: '50%' }}>
-              <About />
-            </Grid>
-          </Grid>
-        ) : null}
+        <Grid container item direction="row" justifyContent="space-between" sx={{ mt: '2%' }}>
+          {windowSize[0] > 600 ? (
+            <>
+              <Grid item xs={6}>
+                <About />
+              </Grid>
+
+              <Grid item xs={5}>
+                <Calendar />
+              </Grid>
+            </>
+          ) : null}
+          {windowSize[0] < 600 ? (
+            <Box sx={{ mt: '10%' }}>
+              <Grid item xs={12}>
+                <Calendar />
+              </Grid>
+              <Grid item xs={12} sx={{ mb: '50%' }}>
+                <About />
+              </Grid>
+            </Box>
+          ) : null}
+        </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 }
