@@ -7,6 +7,8 @@ services:
       - ./public/archive:/app/public/archive
       - ./public/show_images:/app/public/show_images
     image: wsrn:v1.0
+    env_file:
+      - .env.local
     build:
       context: .
       dockerfile: ./Dockerfile
