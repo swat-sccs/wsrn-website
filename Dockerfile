@@ -9,3 +9,5 @@ COPY --chown=node:node . .
 ENV HOSTNAME "0.0.0.0"
 RUN npx prisma generate
 RUN npm run build
+RUN mkdir /public/show_images
+RUN mkdir /data
