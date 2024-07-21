@@ -33,7 +33,7 @@ services:
         - 'traefik.http.middlewares.redirect-www.redirectregex.replacement=https://wsrnfm.com/$${1}'
         - 'traefik.http.middlewares.redirect-www.redirectregex.permanent=true'
 
-    command: /bin/sh -c "npx prisma generate && npm run start"
+    command: npm run start
     networks:
       - traefik
       - internal
