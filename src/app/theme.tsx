@@ -1,6 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 import { Noto_Serif } from 'next/font/google';
-const font = Noto_Serif({ weight: ['300'], subsets: ['latin'] });
+import { Roboto_Serif } from 'next/font/google';
+//const font = Noto_Serif({ weight: ['300'], subsets: ['latin'] });
+const font = Roboto_Serif({ weight: ['300'], subsets: ['latin'] });
+
 import bg from '../../public/img/radio.png';
 
 declare module '@mui/material/styles' {
@@ -9,6 +12,26 @@ declare module '@mui/material/styles' {
   }
 }
 
+// Augment the palette to include an ochre color
+declare module '@mui/material/styles' {
+  interface Palette {
+    darkblue: Palette['primary'];
+    customText: Palette['primary'];
+  }
+  interface PaletteOptions {
+    darkblue?: PaletteOptions['primary'];
+    customText?: PaletteOptions['primary'];
+  }
+}
+// Update the Button's color options to include an ochre option
+/*
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    ochre: true;
+  }
+}
+  */
+
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -16,10 +39,16 @@ const theme = createTheme({
       main: '#31572C',
     },
     primary: {
-      main: '#7798AB',
+      main: '#9EB7CC',
+    },
+    darkblue: {
+      main: '#31485E',
+    },
+    customText: {
+      main: '#E5ECF3',
     },
     secondary: {
-      main: '#649664',
+      main: '#2F5575',
     },
     warning: {
       main: '#EE964B',
@@ -43,7 +72,7 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: '#30475E',
+          backgroundColor: '#31485E',
           //backgroundImage: `url(${bg.src})`,
           backgroundSize: 'contain',
           backgroundAttachment: 'fixed',

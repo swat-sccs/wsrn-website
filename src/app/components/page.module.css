@@ -25,3 +25,19 @@
 .fc-widget-header {
   background-color: blue;
 }
+
+.image:hover {
+  opacity: 0.2;
+  transition: 0.4s ease;
+  background-color: #008cba;
+}
+
+.words {
+  opacity: 0;
+  transition: 0.5s ease;
+}
+
+.words:hover {
+  opacity: 1;
+  transition: 0.4s ease;
+}

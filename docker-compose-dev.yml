@@ -4,25 +4,34 @@ services:
   wsrn:
     init: true
     restart: unless-stopped
+    env_file:
+      - .env.local
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.dev
+    command: /bin/sh -c "npx prisma generate && npm run dev"
+    volumes:
+      - .:/usr/src/app
     environment:
-      NODE_ENV: production
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.docker.network=traefik'
-      - 'traefik.http.routers.wsrndev.entrypoints=https'
-      - 'traefik.http.routers.wsrndev.rule=Host(`dev.wsrn.sccs.swarthmore.edu`)'
-      - 'traefik.http.routers.wsrndev.tls=true'
-      - 'traefik.http.routers.wsrndev.tls.certresolver=letsEncrypt'
-      - 'traefik.http.services.wsrndev.loadbalancer.server.port=3000'
-    container_name: wsrndev-docker
-    command: npm run start
+      NODE_ENV: development
+    ports:
+      - 3000:3000
+      - 9229:9229
+      - 5555:5555
     networks:
-      - traefik
+      - internal
+
+  db:
+    image: mariadb:10.7
+    ports:
+      - 3306:3306
+    env_file:
+      - .env.local
+    volumes:
+      - ./mock_sql/initMockDatabase.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data:/var/lib/mysql
+    networks:
+      - internal
 
 networks:
-  traefik:
-    external: true
-    driver: bridge
+  internal:

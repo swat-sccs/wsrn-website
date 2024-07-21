@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import ThemeRegistry from './ThemeRegistry';
-import Header from './components/header.js';
 import Player from './components/player-new.js';
-import { Container } from '@mui/material';
+import { NextAuthProvider } from './NextAuthProvider';
 
 export const metadata: Metadata = {
   title: 'WSRN | 91.5FM',
@@ -14,20 +13,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      {/*
+    <NextAuthProvider>
+      <html lang="en">
+        {/*
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
-      <link rel="icon" href="favicon.ico" sizes="any" />
-      <head />
-      <body>
-        <ThemeRegistry options={{ key: 'mui' }}>
-          {children}
+        <link rel="icon" href="favicon.ico" sizes="any" />
+        <head />
+        <body>
+          <ThemeRegistry options={{ key: 'mui' }}>
+            {children}
 
-          <Player></Player>
-        </ThemeRegistry>
-      </body>
-    </html>
+            <Player></Player>
+          </ThemeRegistry>
+        </body>
+      </html>
+    </NextAuthProvider>
   );
 }

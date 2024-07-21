@@ -12,6 +12,7 @@ import {
   LinearProgress,
   Fab,
   Container,
+  IconButton,
 } from '@mui/material';
 import Image from 'next/image';
 import logo from '../../../img/wsrn2.png';
@@ -40,7 +41,7 @@ export default function Player() {
   const [audioElement, setAudioElement] = React.useState(null);
   const [analyzerData, setAnalyzerData] = useState(null);
   const [audioContext, setAudioContext] = useState(null);
-  const [bottomHeight, setBottomHeight] = React.useState('15vh');
+  const [bottomHeight, setBottomHeight] = React.useState('7vh');
   const [STREAM, setSTREAM] = React.useState(null);
   const [_analyser, set_analyser] = React.useState(null);
   const [metadata, setMetadata] = React.useState({ title: 'Listen to WSRN!', listeners: 0 });
@@ -65,8 +66,7 @@ export default function Player() {
       setIcecast(
         new IcecastMetadataPlayer(station.endpoint, {
           crossorigin: 'anonymous',
-          icyDetectionTimeout: 5000,
-          enableLogging: true,
+          icyDetectionTimeout: 1000,
           metadataTypes: station.metadataTypes,
           audioElement: audioElement,
           endpoints: station.endpoints,
@@ -105,7 +105,7 @@ export default function Player() {
     error: showName_error,
     isLoading: showName_isLoading,
   } = useSWR('/api/states', fetcher, {
-    refreshInterval: 2000,
+    refreshInterval: 5000,
   });
 
   useEffect(() => {
@@ -128,6 +128,7 @@ export default function Player() {
   }, [STREAM, data]);
 
   const togglePlaying = useCallback(() => {
+    console.log('Trying to play');
     if (!audioContext) {
       // create a new AudioContext
       const _audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -178,66 +179,172 @@ export default function Player() {
   const PlayPauseComponent = () => {
     if (!playing) {
       return (
+        <IconButton
+          disableRipple
+          onClick={() => togglePlaying()}
+          color="darkblue"
+          sx={{ backgroundColor: 'rgba(0,0,0,0)' }}
+        >
+          <PlayArrow sx={{ height: 75, width: 75 }} />
+        </IconButton>
+      );
+    }
+
+    return (
+      <IconButton disableRipple onClick={() => togglePlaying()}>
+        <Pause color="darkblue" sx={{ height: 75, width: 75 }} />
+      </IconButton>
+    );
+  };
+
+  const RenderPlayer = () => {
+    if (showName) {
+      if (!isLoading && !error && !showName_isLoading) {
+        //If Live But with title
+        if (showName.title != 'null' && showName.live_state == 1) {
+          return (
+            <>
+              <Grid container spacing={8}>
+                <Grid item>
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    overflow="auto"
+                    sx={{ mt: '1%', color: theme.palette.darkblue.main }}
+                  >
+                    {showName.title}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    overflow="auto"
+                    sx={{ mt: '1%', color: theme.palette.darkblue.main }}
+                  >
+                    {showName.artist}
+                  </Typography>
+                </Grid>
+                {showName.album_art != 'null' ? (
+                  <Grid item>
+                    <Box
+                      component="img"
+                      sx={{ maxHeight: { xs: 60 }, maxWidth: { xs: 60 }, borderRadius: 2 }}
+                      src={`data:image/png;base64, ${showName.album_art}`}
+                    ></Box>
+                  </Grid>
+                ) : null}
+              </Grid>
+            </>
+          );
+        }
+        //If Live but No title
+        if (showName.title == 'null' && showName.live_state == 1) {
+          return (
+            <>
+              <Typography component="div" variant="h6" overflow="hidden">
+                <Sensors sx={{ height: 20, width: 20, color: theme.palette.darkblue.main }} /> LIVE
+                &nbsp; &nbsp;
+                {/*
+                <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
+                */}
+                &nbsp;
+              </Typography>
+              <Typography
+                component="div"
+                variant="h6"
+                overflow="auto"
+                sx={{ mt: '1%', color: theme.palette.darkblue.main }}
+              >
+                WSRN Radio Live
+              </Typography>
+            </>
+          );
+        } else {
+          //Not live
+
+          if (showName.title != 'null' && showName.live_state == 0) {
+            return (
+              <>
+                &nbsp;
+                {/*
+                <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
+                */}
+                <Grid container spacing={8}>
+                  <Grid item>
+                    <Typography
+                      variant="h5"
+                      fontWeight="bold"
+                      overflow="auto"
+                      sx={{ color: theme.palette.darkblue.main }}
+                    >
+                      {showName.title}
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      overflow="auto"
+                      sx={{ mt: '1%', color: theme.palette.darkblue.main }}
+                    >
+                      {showName.artist}
+                    </Typography>
+                  </Grid>
+
+                  {showName.album_art != 'null' ? (
+                    <Grid item>
+                      <Box
+                        sx={{
+                          width: 65,
+                          height: 65,
+                          backgroundColor: 'primary.main',
+                          borderRadius: 2,
+                        }}
+                      >
+                        <Grid
+                          container
+                          justifyContent="center"
+                          alignItems="center"
+                          direction="column"
+                        >
+                          <Grid item>
+                            <Box
+                              component="img"
+                              sx={{ maxHeight: { xs: 60 }, maxWidth: { xs: 60 }, borderRadius: 2 }}
+                              src={`data:image/png;base64, ${showName.album_art}`}
+                            ></Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Grid>
+                  ) : null}
+                </Grid>
+              </>
+            );
+          }
+        }
+      }
+      return (
         <>
-          <PlayArrow onClick={() => togglePlaying()} sx={{ height: 100, width: 100 }} />
+          &nbsp;
+          <Typography
+            component="div"
+            variant="h6"
+            overflow="hidden"
+            sx={{ mt: '1%', color: theme.palette.darkblue.main }}
+          >
+            WSRN Archives
+          </Typography>
         </>
       );
     }
     return (
       <>
-        <Pause onClick={() => togglePlaying()} sx={{ height: 100, width: 100 }} />
-      </>
-    );
-  };
-
-  const RenderPlayer = () => {
-    if (showName_isLoading || (isLoading && !error && !showName_error)) {
-      return <Box></Box>;
-    } else if (!isLoading && !error && !showName_isLoading) {
-      if (showName.Show != 'NA' && showName.switch == 'B') {
-        return (
-          <>
-            <Typography component="div" variant="h6" overflow="hidden">
-              <Sensors sx={{ height: 20, width: 20 }} /> LIVE &nbsp; &nbsp;
-              <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
-              &nbsp;
-            </Typography>
-            <Typography variant="h6" overflow="auto" sx={{ fontFamily: 'Serif', mt: '1%' }}>
-              {showName.Show}
-            </Typography>
-          </>
-        );
-      }
-      if (showName.Show == 'NA' && showName.switch == 'B') {
-        return (
-          <>
-            <Typography component="div" variant="h6" overflow="hidden">
-              <Sensors sx={{ height: 20, width: 20 }} /> LIVE &nbsp; &nbsp;
-              <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
-              &nbsp;
-            </Typography>
-            <Typography component="div" variant="h6" overflow="auto" sx={{ mt: '1%' }}>
-              WSRN Radio Live
-            </Typography>
-          </>
-        );
-      } else {
-        return (
-          <>
-            &nbsp;
-            <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
-            <Typography variant="h6" overflow="auto" sx={{ mt: '1%' }}>
-              {metadata.title}
-            </Typography>
-          </>
-        );
-      }
-    }
-    return (
-      <>
         &nbsp;
-        <Typography component="div" variant="h6" overflow="hidden" sx={{ mt: '1%' }}>
-          WSRN Archives
+        {/*
+        <Headphones sx={{ height: 20, width: 20 }} /> 0
+        */}
+        <Typography
+          variant="h6"
+          overflow="auto"
+          sx={{ mt: '1%', color: theme.palette.darkblue.main }}
+        >
+          Listen to WSRN!
         </Typography>
       </>
     );
@@ -290,7 +397,10 @@ export default function Player() {
     if (playing) {
       return (
         <>
-          <PauseRounded onClick={() => togglePlaying()} sx={{ height: 200, width: 200 }} />
+          <PauseRounded
+            onClick={() => togglePlaying()}
+            sx={{ height: 200, width: 200, color: theme.palette.darkblue.main }}
+          />
         </>
       );
     }
@@ -310,40 +420,155 @@ export default function Player() {
   }, []);
 
   return (
-    <Box
-      sx={{
-        position: 'fixed',
-        bottom: 0,
-        width: '100%',
-        left: '0',
-        height: bottomHeight,
-        zIndex: '10',
-      }}
-    >
-      {windowSize[0] > 600 ? (
-        <Typography
-          sx={{ position: 'absolute', bottom: 0, right: 0, mr: '1%', mb: '1%' }}
-          onClick={() => openInNewTab('https://publicfiles.fcc.gov/fm-profile/wsrn-fm')}
-          variant="body1"
-          style={{ cursor: 'pointer' }}
-        >
-          FCC Pubilc File
-        </Typography>
-      ) : null}
-
-      <Card
+    <Box>
+      <Box
         sx={{
-          display: 'flex',
-          backgroundColor: theme.palette.secondary.main,
-          height: '100%',
-          borderRadius: '10px',
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
+          left: '0',
+          height: bottomHeight,
+          zIndex: '9',
+          backgroundColor: theme.palette.primary.main,
         }}
       >
-        <CardContent>
-          <Grid container direction="row" sx={{ width: '100vw' }}>
-            <Grid item xs={12} sx={{ mt: -2, width: '100vw', ml: -2 }}>
+        {windowSize[0] > 600 ? (
+          <Typography
+            sx={{ position: 'absolute', bottom: 0, right: 0, mr: '1%', mb: '1%' }}
+            onClick={() => openInNewTab('https://publicfiles.fcc.gov/fm-profile/wsrn-fm')}
+            variant="body1"
+            style={{ cursor: 'pointer' }}
+          >
+            FCC Pubilc File
+          </Typography>
+        ) : null}
+      </Box>
+
+      <Grid container justifyContent="center" alignItems="center" sx={{ display: 'flex' }}>
+        <Box
+          sx={{
+            height: '12%',
+            boxShadow: 0,
+            position: 'fixed',
+            bottom: 0,
+            backgroundColor: theme.palette.primary.main,
+            borderRadius: '10px',
+            zIndex: 10,
+          }}
+        >
+          <Grid container direction="row">
+            <Grid item xs={12}>
               <Loading />
             </Grid>
+            {windowSize[0] < 600 ? (
+              <Grid item xs={3}>
+                <PlayPauseComponent></PlayPauseComponent>
+              </Grid>
+            ) : (
+              <Grid item lg={'auto'}>
+                <PlayPauseComponent></PlayPauseComponent>
+              </Grid>
+            )}
+            <Grid item xs={8} lg={'auto'} sx={{ pr: 5 }}>
+              <div sx={{ color: theme.palette.darkblue.main }}>
+                <RenderPlayer />
+              </div>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+    </Box>
+  );
+}
+
+//https://coolors.co/palette/2b2d42-8d99ae-edf2f4-ef233c-d90429
+
+//https://stackoverflow.com/questions/67116204/possibility-to-record-playback-of-browser-audio-element-using-javascript
+
+//https://www.npmjs.com/package/react-audio-visualize
+
+/*
+
+ <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          width: '100%',
+          left: '0',
+          height: bottomHeight,
+          zIndex: '10',
+        }}
+      >
+        {windowSize[0] > 600 ? (
+          <Typography
+            sx={{ position: 'absolute', bottom: 0, right: 0, mr: '1%', mb: '1%' }}
+            onClick={() => openInNewTab('https://publicfiles.fcc.gov/fm-profile/wsrn-fm')}
+            variant="body1"
+            style={{ cursor: 'pointer' }}
+          >
+            FCC Pubilc File
+          </Typography>
+        ) : null}
+
+        <Card
+          sx={{
+            display: 'flex',
+            backgroundColor: theme.palette.secondary.main,
+            borderRadius: '10px',
+            zIndex: 20,
+          }}
+        >
+          <CardContent>
+            <Grid container direction="row" sx={{ width: '100vw' }}>
+              <Grid item xs={12} sx={{ mt: -2, width: '100vw', ml: -2 }}>
+                <Loading />
+              </Grid>
+
+              <Grid
+                container
+                item
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <Box
+                  sx={{
+                    border: 1,
+                    pr: 3,
+                    borderRadius: 10,
+                    backgroundColor: theme.palette.secondary.main,
+                  }}
+                >
+                  <Grid
+                    container
+                    item
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    {windowSize[0] < 600 ? (
+                      <Grid item xs={3}>
+                        <PlayPauseComponent></PlayPauseComponent>
+                      </Grid>
+                    ) : (
+                      <Grid item lg={'auto'}>
+                        <PlayPauseComponent></PlayPauseComponent>
+                      </Grid>
+                    )}
+                    <Grid item xs={9} lg={'auto'}>
+                      <RenderPlayer />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Box>
+
+
 
             <Grid
               container
@@ -366,15 +591,5 @@ export default function Player() {
                 <RenderPlayer />
               </Grid>
             </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-    </Box>
-  );
-}
 
-//https://coolors.co/palette/2b2d42-8d99ae-edf2f4-ef233c-d90429
-
-//https://stackoverflow.com/questions/67116204/possibility-to-record-playback-of-browser-audio-element-using-javascript
-
-//https://www.npmjs.com/package/react-audio-visualize
+*/

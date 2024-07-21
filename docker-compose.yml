@@ -5,7 +5,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./public/archive:/app/public/archive
-    image: wsrn:v0.9
+      - ./public/show_images:/app/public/show_images
+    image: wsrn:v1.0
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -29,11 +30,23 @@ services:
         - 'traefik.http.middlewares.redirect-www.redirectregex.replacement=https://wsrnfm.com/$${1}'
         - 'traefik.http.middlewares.redirect-www.redirectregex.permanent=true'
 
-    container_name: wsrn-docker
-    command: npm run start
+    command: /bin/sh -c "npx prisma migrate deploy && npm run start"
     networks:
       - traefik
+      - internal
+
+  db:
+    image: mariadb:10.7
+    ports:
+      - 3306:3306
+    env_file:
+      - .env.local
+    volumes:
+      - ./data:/var/lib/mysql
+    networks:
+      - internal
 
 networks:
   traefik:
     external: true
+  internal:

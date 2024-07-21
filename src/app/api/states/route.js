@@ -3,12 +3,15 @@ import axios from 'axios';
 
 let link = process.env.IP;
 
+//Get states from IMAC running the readio stream. Live/recording state, current song - artist
+
 export async function GET(request) {
   let data = {};
   await axios
     .get(link, {
       headers: {
         'X-API-Key': process.env.KEY, //the token is a variable which holds the token
+        // ah yes very good stackoverflow comment
       },
     })
     .then((res) => {

@@ -8,12 +8,15 @@ import googleCalendarPlugin from '@fullcalendar/google-calendar';
 import styles from './page.module.css';
 import * as React from 'react';
 import styled from '@emotion/styled';
+import { useRouter } from 'next/navigation';
 
 import { Container } from '@mui/material';
 
 //
 
 export default function Calendar(props) {
+  const router = useRouter();
+
   const event2 = {
     url: 'api/cal',
     format: 'ics',
@@ -38,6 +41,7 @@ export default function Calendar(props) {
       background-image: none;
     }
   `;
+
   return (
     <StyleWrapper sx={{ overflowY: 'scroll' }}>
       <FullCalendar
@@ -56,6 +60,9 @@ export default function Calendar(props) {
         googleCalendarApiKey={process.env.NEXT_PUBLIC_GAPISECRET}
         eventClick={function (info) {
           info.jsEvent.preventDefault(); // don't let the browser navigate
+
+          router.push('/shows');
+          console.log(info.event._def.title);
         }}
       />
     </StyleWrapper>

@@ -7,73 +7,27 @@ import logo from '../../../img/studio_a.jpg';
 export default function About() {
   if (window.innerWidth > 500) {
     return (
-      <Box sx={{ mt: '2%', width: '90vw' }}>
-        <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start">
-          <Grid item container spacing={{ xs: 20, lg: 10 }}>
-            <Grid item xs={4} lg={2}>
-              {' '}
-              <Typography
-                sx={{ fontWeight: 'bold', mt: '3%', whiteSpace: 'pre-wrap' }}
-                variant="h5"
-                textAlign="right"
-              >
-                Submission Policy:
-              </Typography>
-            </Grid>
-            <Grid item xs={8} lg={2}>
-              <Typography
-                variant="h4"
-                style={{ color: '#EDF2F4' }}
-                sx={{ mt: '3%', textAlign: 'left' }}
-              >
-                About Us
-              </Typography>
-            </Grid>
+      <Container sx={{ borderRadius: 4, backgroundColor: 'primary.main', p: 2 }}>
+        <Grid container>
+          <Grid item>
+            <Typography variant="h4" color="darkblue.main">
+              About Us
+            </Typography>
           </Grid>
-
-          <Grid container spacing={3} sx={{ mt: '1px' }}>
-            <Grid item xs={5} lg={1.5}>
-              <Typography variant="body1" sx={{ mt: '1%' }} textAlign={'right'}>
-                If you have music that you want us to play, please send in:
-              </Typography>
-
-              <Typography variant="body1" sx={{}} textAlign={'right'}>
-                1. Either an audio file or a link
-              </Typography>
-
-              <Typography
-                variant="body1"
-                sx={{ whiteSpace: 'pre-wrap', mb: '2%' }}
-                textAlign={'right'}
-              >
-                2. A blurb about the artist/music to &nbsp;
-                <Link href="mailto: wsrn-dj-owner@sccs.swarthmore.edu" style={{ color: '#EE964B' }}>
-                  wsrn-dj-owner@ sccs.swarthmore.edu
-                </Link>
-              </Typography>
-            </Grid>
-            <Grid item no-gutters>
-              <Divider orientation="vertical" sx={{ backgroundColor: 'white' }} />
-            </Grid>
-            <Grid item xs={6} lg={3.5}>
-              <Typography variant="body1" textAlign="left">
-                WSRN [Worldwide Swarthmore Radio Network] is Swarthmore College's fiercely
-                independent, student run radio station. We broadcast on 91.5 FM, and also on our
-                website. Any dead air is filled by previously recorded shows. Our station is based
-                in Parrish 4th.
-              </Typography>
-              <Typography variant="body1" textAlign="left">
-                We play new music submissions from 5-6pm on Sundays during our New Music Sunday
-                segment. Since this show will be recorded, and our station plays recorded shows to
-                fill up dead air, your music may be played multiple times a week. We can’t guarantee
-                that submitted music will be played (or if you submit an album that it will be
-                played in its entirety). Our submission policy is brand new so we aim to be more
-                responsive starting now (10/27).
-              </Typography>
-            </Grid>
+          <Grid item>
+            <Typography variant="body2" color="darkblue.main">
+              WSRN [Worldwide Swarthmore Radio Network] is Swarthmore College's fiercely
+              independent, student run radio station. We broadcast on 91.5 FM, and also on our
+              website. Any dead air is filled by previously recorded shows. Our station is based in
+              Parrish 4th. We play new music submissions on Sundays during our New Music Sunday
+              segment. Since this show will be recorded, and our station plays recorded shows to
+              fill up dead air, your music may be played multiple times a week. We can’t guarantee
+              that submitted music will be played (or if you submit an album that it will be played
+              in its entirety).
+            </Typography>
           </Grid>
         </Grid>
-      </Box>
+      </Container>
     );
   }
   return (
@@ -111,14 +65,12 @@ export default function About() {
       <Typography variant="body1" textAlign="left">
         WSRN [Worldwide Swarthmore Radio Network] is Swarthmore College's fiercely independent,
         student run radio station. We broadcast on 91.5 FM, and also on our website. Any dead air is
-        filled by previously recorded shows. Our station is based in Parrish 4th.
-      </Typography>
-      <Typography variant="body1" textAlign="left">
-        We play new music submissions from 5-6pm on Sundays during our New Music Sunday segment.
-        Since this show will be recorded, and our station plays recorded shows to fill up dead air,
-        your music may be played multiple times a week. We can’t guarantee that submitted music will
-        be played (or if you submit an album that it will be played in its entirety). Our submission
-        policy is brand new so we aim to be more responsive starting now (10/27).
+        filled by previously recorded shows. Our station is based in Parrish 4th. We play new music
+        submissions from 5-6pm on Sundays during our New Music Sunday segment. Since this show will
+        be recorded, and our station plays recorded shows to fill up dead air, your music may be
+        played multiple times a week. We can’t guarantee that submitted music will be played (or if
+        you submit an album that it will be played in its entirety). Our submission policy is brand
+        new so we aim to be more responsive starting now (10/27).
       </Typography>
     </Box>
   );

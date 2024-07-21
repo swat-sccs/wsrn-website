@@ -1,11 +1,14 @@
 'use client';
 import React, { useState } from 'react';
-import { Container, Grid, Typography, Box, Fab, Card } from '@mui/material';
-import { PlayArrowRounded, PauseRounded, Inventory } from '@mui/icons-material';
-import Upcoming from '@/app/components/upcoming.js';
+import { Container, Grid, Typography, Box, Fab, Card, IconButton } from '@mui/material';
 import About from '@/app/components/about';
 import Calendar from '@/app/components/calendar';
 import Link from 'next/link';
+import Layout from '@/app/components/layout';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import Upcoming from '@/app/components/upcoming_shows';
+
+import ShowComp from '@/app/components/show_comp';
 
 export default function Home() {
   const [windowSize, setWindowSize]: any[] = React.useState([]);
@@ -21,45 +24,40 @@ export default function Home() {
   }, []);
 
   return (
-    <Container sx={{ overflowX: 'hidden' }}>
-      <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start">
-        <Grid container direction="row" justifyContent="space-between" item>
-          <Grid item>
-            <Typography
-              style={{ fontFamily: 'Serif', color: '#EDF2F4' }}
-              variant="h1"
-              sx={{ mt: '2%' }}
-            >
-              WSRN
-            </Typography>
-
-            <Typography style={{ fontFamily: 'Serif', color: '#EDF2F4' }} variant="body1">
-              Worldwide · Swarthmore · Radio · Network
-            </Typography>
-          </Grid>
-          <Grid item sx={{ mt: '2%' }}>
-            <Link href="/archives" passHref style={{ textDecoration: 'none' }}>
-              <Inventory sx={{ color: 'white' }} fontSize="large"></Inventory>
-            </Link>
-          </Grid>
-        </Grid>
-        {/*
-    <Upcoming></Upcoming>
-     */}
-
-        <Grid container item direction="row" justifyContent="space-between" sx={{ mt: '2%' }}>
-          {windowSize[0] > 600 ? (
-            <>
-              <Grid item xs={6}>
-                <About />
+    <Layout
+      title={
+        <>
+          91.5 FM
+          <Link href="https://www.instagram.com/wsrn.fm/">
+            <IconButton aria-label="delete" size="large">
+              <InstagramIcon fontSize="inherit" />
+            </IconButton>
+          </Link>
+        </>
+      }
+    >
+      <Container sx={{ overflowX: 'hidden' }}>
+        {windowSize[0] > 600 ? (
+          <Box sx={{ mt: 2 }}>
+            <Grid container direction="row" justifyContent={'space-evenly'} spacing={5}>
+              <Grid container item xs={7} spacing={2} justifyContent="space-between">
+                <Grid item xs={12}>
+                  <ShowComp />
+                </Grid>
+                <Grid item xs={12}>
+                  <About />
+                </Grid>
               </Grid>
-
               <Grid item xs={5}>
-                <Calendar />
+                <Grid item>
+                  <Upcoming />
+                </Grid>
               </Grid>
-            </>
-          ) : null}
-          {windowSize[0] < 600 ? (
+            </Grid>
+          </Box>
+        ) : null}
+        {windowSize[0] < 600 ? (
+          <Grid item xs={12} sm={6}>
             <Box sx={{ mt: '10%' }}>
               <Grid item xs={12}>
                 <Calendar />
@@ -68,9 +66,9 @@ export default function Home() {
                 <About />
               </Grid>
             </Box>
-          ) : null}
-        </Grid>
-      </Grid>
-    </Container>
+          </Grid>
+        ) : null}
+      </Container>
+    </Layout>
   );
 }
