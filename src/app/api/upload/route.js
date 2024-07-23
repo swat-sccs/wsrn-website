@@ -18,8 +18,6 @@ export const POST = async (req, res) => {
   const filename = file.name.replaceAll(' ', '_');
 
   try {
-    let directory = path.join(process.cwd(), '/data/images/');
-    await mkdir(directory, { recursive: true });
     await writeFile(path.join(process.cwd(), '/data/images/' + filename), buffer);
 
     return NextResponse.json({ Message: 'Success', status: 201 });
