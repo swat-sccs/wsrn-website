@@ -25,7 +25,7 @@ export async function POST(request) {
   });
 
   try {
-    unlink(path.join(process.cwd(), '/images/' + String(currentYear) + '/' + req.img));
+    unlink(path.join('/data/images/' + String(currentYear) + '/' + req.img));
     console.log('File deleted!');
   } catch (err) {
     console.log('Error occurred ', err);
