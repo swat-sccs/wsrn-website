@@ -59,6 +59,14 @@ services:
       placement:
         constraints:
           - node.role == manager
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.images.entrypoints=https'
+        - 'traefik.http.routers.images.rule=Host(`images.local`)'
+        - 'traefik.http.routers.images.tls=true'
+        - 'traefik.http.routers.images.tls.certresolver=letsEncrypt'
+        - 'traefik.http.services.images.loadbalancer.server.port=5240'
+        - 'traefik.docker.network=traefik'
     ports:
       - 5240:5240
     healthcheck:
@@ -70,9 +78,7 @@ services:
     volumes:
       - ./data/images:/data/images
     networks:
-      internal:
-        aliases:
-          - images.local
+      - traefik
     environment:
       ### Server
       ### See: https://docs.imgproxy.net/configuration/options#server
