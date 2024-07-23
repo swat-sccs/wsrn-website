@@ -43,16 +43,22 @@ export default function App() {
                 src={`/img/${item.img}`}
                 alt={item.title}
                 loading="lazy"
-                style={{ objectFit: 'cover', width: '150px', height: '150px', borderRadius: '4px' }}
+                style={{ objectFit: 'cover', width: '11vw', height: '11vw', borderRadius: '4px' }}
               />
             ) : (
-              <Image
-                fill={true}
-                sizes="(max-width: 500px) 40vw, (max-width: 500px) 20vw, 15vw"
-                loading={'lazy'}
-                src={item.img}
-                alt={item.title}
-              />
+              <Box
+                sx={{ width: '11vw', minHeight: '11vw', overflow: 'hidden', borderRadius: '4px' }}
+              >
+                <Image
+                  style={{ borderRadius: '4px' }}
+                  objectFit={'cover'}
+                  fill
+                  sizes="(max-width: 1000px) 80vw, (max-width: 1000px) 20vw, 15vw"
+                  loading={'lazy'}
+                  src={item.img}
+                  alt={item.title}
+                />
+              </Box>
             )}
 
             <Box

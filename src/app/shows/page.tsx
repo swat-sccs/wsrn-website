@@ -49,6 +49,7 @@ export default function App() {
                 backgroundColor: 'primary.main',
                 color: 'darkblue.main',
                 fontWeight: 'bold',
+                zIndex: 10,
               }}
               label={moment(item.startTime).year()}
               variant="filled"
@@ -62,13 +63,17 @@ export default function App() {
                 loading="lazy"
               />
             ) : (
-              <Image
-                fill={true}
-                sizes="(max-width: 500px) 40vw, (max-width: 500px) 20vw, 20vw"
-                loading={'lazy'}
-                src={item.img}
-                alt={item.title}
-              />
+              <Box sx={{ width: '11vw', height: '11vw', overflow: 'hidden', borderRadius: '4px' }}>
+                <Image
+                  style={{ borderRadius: '4px' }}
+                  objectFit={'cover'}
+                  fill
+                  sizes="(max-width: 1000px) 80vw, (max-width: 1000px) 20vw, 15vw"
+                  loading={'lazy'}
+                  src={item.img}
+                  alt={item.title}
+                />
+              </Box>
             )}
             <Box
               className={styles.words}
