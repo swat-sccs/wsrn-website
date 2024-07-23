@@ -38,6 +38,7 @@ export default function App() {
       let filtered_data = show_data
         .filter((item: any) => moment(item.startTime).year() == moment().year())
         .sort(function (first: any, second: any) {
+          console.log(btoa('local:///' + moment(first.startTime).year() + first.img));
           return first.title.localeCompare(second.title);
         });
       return filtered_data.map((item: any) => (
@@ -54,8 +55,12 @@ export default function App() {
               />
             ) : (
               <img
-                srcSet={`/show_images/${moment().year()}/${item.img}`}
-                src={`/show_images/${moment().year()}/${item.img}`}
+                //local:///2024/test_123.jpeg
+                //btoa('local:///' + moment(first.startTime).year() + first.img)
+                //'http://localhost:5240/insecure/plain/' +'local:///' +moment(item.startTime).year() +'/' +item.img
+                src={`http://localhost:5240/sig/${btoa(
+                  'local:///' + moment(item.startTime).year() + '/' + item.img,
+                )}`}
                 alt={item.title}
                 loading="lazy"
                 style={{

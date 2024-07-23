@@ -19,10 +19,10 @@ export const POST = async (req, res) => {
   console.log(filename);
 
   try {
-    let directory = path.join(process.cwd(), 'public/show_images/' + String(currentYear) + '/');
+    let directory = path.join(process.cwd(), '/data/images/' + String(currentYear) + '/');
     await mkdir(directory, { recursive: true });
     await writeFile(
-      path.join(process.cwd(), 'public/show_images/' + String(currentYear) + '/' + filename),
+      path.join(process.cwd(), '/data/images/' + String(currentYear) + '/' + filename),
       buffer,
     );
 

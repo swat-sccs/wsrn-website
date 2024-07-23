@@ -76,7 +76,7 @@ export async function DELETE(request) {
   });
 
   try {
-    unlink(path.join(process.cwd(), 'public/show_images/' + String(currentYear) + '/' + req.img));
+    unlink(path.join(process.cwd(), '/images/' + String(currentYear) + '/' + req.img));
     console.log('File deleted!');
   } catch (err) {
     console.log('Error occurred ', err);

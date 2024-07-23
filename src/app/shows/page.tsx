@@ -34,6 +34,7 @@ export default function App() {
   const RenderCards = () => {
     if (!show_data_isLoading && !show_data_error) {
       let array_tosort = show_data;
+
       return array_tosort
         .sort(function (first: any, second: any) {
           return moment(second.startTime).diff(moment(first.startTime));
@@ -62,8 +63,9 @@ export default function App() {
               />
             ) : (
               <img
-                srcSet={`/show_images/${moment(item.startTime).year()}/${item.img}`}
-                src={`/show_images/${moment(item.startTime).year()}/${item.img}`}
+                src={`http://localhost:5240/sig/${btoa(
+                  'local:///' + moment(item.startTime).year() + '/' + item.img,
+                )}`}
                 alt={item.title}
                 loading="lazy"
               />
