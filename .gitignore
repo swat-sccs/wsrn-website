@@ -38,5 +38,6 @@ next-env.d.ts
 .env.local
 
 /public/archive/
-/data/
+/data/images/2*
+/data/db/
 /public/show_images/

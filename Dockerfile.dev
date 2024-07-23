@@ -3,4 +3,4 @@ ENV NODE_ENV=production
 WORKDIR /app
 RUN chown -R node /app
 USER node
-RUN mkdir /data/images && chown -R node:node /data/images
+RUN mkdir -p /data/images && chown -R node:node /data/images

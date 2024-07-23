@@ -67,7 +67,6 @@ services:
       interval: '10s'
       retries: 3
     volumes:
-      - ./www:/home:cached
       - ./data/images:/data/images
     networks:
       - internal
@@ -85,9 +84,9 @@ services:
       ### See: https://docs.imgproxy.net/configuration/options#log
       IMGPROXY_LOG_LEVEL: 'warn'
       IMGPROXY_LOG_FORMAT: 'pretty'
-      IMGPROXY_DEVELOPMENT_ERRORS_MODE: false
-      IMGPROXY_ENABLE_DEBUG_HEADERS: false
-      IMGPROXY_REPORT_DOWNLOADING_ERRORS: false
+      IMGPROXY_DEVELOPMENT_ERRORS_MODE: 'false'
+      IMGPROXY_ENABLE_DEBUG_HEADERS: 'false'
+      IMGPROXY_REPORT_DOWNLOADING_ERRORS: 'false'
 
       ### Client
       IMGPROXY_READ_REQUEST_TIMEOUT: 10
@@ -96,19 +95,19 @@ services:
       IMGPROXY_CLIENT_KEEP_ALIVE_TIMEOUT: 90
       IMGPROXY_DOWNLOAD_TIMEOUT: 10
       IMGPROXY_BASE_URL: ''
-      IMGPROXY_CACHE_CONTROL_PASSTHROUGH: false
+      IMGPROXY_CACHE_CONTROL_PASSTHROUGH: 'false'
       IMGPROXY_ETAG_BUSTER: ''
       IMGPROXY_HEALTH_CHECK_PATH: ''
-      IMGPROXY_IGNORE_SSL_VERIFICATION: true
+      IMGPROXY_IGNORE_SSL_VERIFICATION: 'true'
       IMGPROXY_MAX_CLIENTS: 2048
       IMGPROXY_MAX_REDIRECTS: 10
       IMGPROXY_PATH_PREFIX: ''
       IMGPROXY_REQUESTS_QUEUE_SIZE: 0
-      IMGPROXY_SET_CANONICAL_HEADER: true
-      IMGPROXY_SO_REUSEPORT: true
+      IMGPROXY_SET_CANONICAL_HEADER: 'true'
+      IMGPROXY_SO_REUSEPORT: 'true'
       IMGPROXY_TTL: 31536000
-      IMGPROXY_USE_ETAG: false
-      IMGPROXY_USE_LAST_MODIFIED: false
+      IMGPROXY_USE_ETAG: 'false'
+      IMGPROXY_USE_LAST_MODIFIED: 'false'
 
       ### Preferred formats
       ### See: https://docs.imgproxy.net/configuration/options#preferred-formats
@@ -120,19 +119,19 @@ services:
 
       ### Client Hints support
       ### See: https://docs.imgproxy.net/configuration/options#client-hints-support
-      IMGPROXY_ENABLE_CLIENT_HINTS: true
+      IMGPROXY_ENABLE_CLIENT_HINTS: 'true'
 
       ### See: https://docs.imgproxy.net/configuration/options#miscellaneous
-      IMGPROXY_AUTO_ROTATE: true
-      IMGPROXY_DISABLE_SHRINK_ON_LOAD: false
-      IMGPROXY_ENFORCE_THUMBNAIL: false
-      IMGPROXY_KEEP_COPYRIGHT: false
-      IMGPROXY_RETURN_ATTACHMENT: false
-      IMGPROXY_SANITIZE_SVG: true
-      IMGPROXY_STRIP_COLOR_PROFILE: true
-      IMGPROXY_STRIP_METADATA: true
-      IMGPROXY_SVG_FIX_UNSUPPORTED: false
-      IMGPROXY_USE_LINEAR_COLORSPACE: false
+      IMGPROXY_AUTO_ROTATE: 'true'
+      IMGPROXY_DISABLE_SHRINK_ON_LOAD: 'false'
+      IMGPROXY_ENFORCE_THUMBNAIL: 'false'
+      IMGPROXY_KEEP_COPYRIGHT: 'false'
+      IMGPROXY_RETURN_ATTACHMENT: 'false'
+      IMGPROXY_SANITIZE_SVG: 'true'
+      IMGPROXY_STRIP_COLOR_PROFILE: 'true'
+      IMGPROXY_STRIP_METADATA: 'true'
+      IMGPROXY_SVG_FIX_UNSUPPORTED: 'false'
+      IMGPROXY_USE_LINEAR_COLORSPACE: 'false'
 
 networks:
   traefik:
