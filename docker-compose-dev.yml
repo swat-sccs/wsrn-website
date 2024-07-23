@@ -36,7 +36,12 @@ services:
   imgproxy:
     restart: unless-stopped
     image: darthsim/imgproxy:v3
-    container_name: imgproxy_app
+    container_name: wsrn_imgproxy
+    hostname: images.local
+    networks:
+      internal:
+        aliases:
+          - images.local
     ports:
       - 5240:5240
     healthcheck:

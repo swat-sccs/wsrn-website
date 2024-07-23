@@ -66,10 +66,13 @@ services:
       timeout: '10s'
       interval: '10s'
       retries: 3
+    hostname: images.local
     volumes:
       - ./data/images:/data/images
     networks:
-      - internal
+      internal:
+        aliases:
+          - images.local
     environment:
       ### Server
       ### See: https://docs.imgproxy.net/configuration/options#server
