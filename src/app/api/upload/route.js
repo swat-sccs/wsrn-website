@@ -16,15 +16,11 @@ export const POST = async (req, res) => {
   const buffer = Buffer.from(await file.arrayBuffer());
 
   const filename = file.name.replaceAll(' ', '_');
-  console.log(filename);
 
   try {
-    let directory = path.join(process.cwd(), '/data/images/' + String(currentYear) + '/');
+    let directory = path.join(process.cwd(), '/data/images/');
     await mkdir(directory, { recursive: true });
-    await writeFile(
-      path.join(process.cwd(), '/data/images/' + String(currentYear) + '/' + filename),
-      buffer,
-    );
+    await writeFile(path.join(process.cwd(), '/data/images/' + filename), buffer);
 
     return NextResponse.json({ Message: 'Success', status: 201 });
   } catch (error) {

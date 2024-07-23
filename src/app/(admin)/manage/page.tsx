@@ -287,6 +287,8 @@ export default function App() {
       let fileType = file.type.split('/').pop();
       const formData = new FormData();
       const fileName =
+        moment(showData.startTime).year() +
+        '_' +
         showData.title.toLowerCase().trim() +
         '_' +
         showData.dj.trim().toLowerCase().replaceAll(' ', '_') +

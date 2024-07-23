@@ -5,19 +5,12 @@ import Grid from '@mui/material/Unstable_Grid2';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
-import Image from 'next/image';
-import logo from '../../../img/studio_a.jpg';
 import styles from './page.module.css';
 import Link from 'next/link';
 import moment from 'moment';
 import useSWR from 'swr';
-
-import Layout from '../components/layout';
 import { useEffect, useState } from 'react';
-import { SystemSecurityUpdate } from '@mui/icons-material';
+import Image from 'next/image';
 
 const itemData: any = [];
 
@@ -34,12 +27,12 @@ export default function App() {
 
   const RenderCards = () => {
     if (!show_data_isLoading && !show_data_error) {
-      console.log(moment().year());
       let filtered_data = show_data
         .filter((item: any) => moment(item.startTime).year() == moment().year())
         .sort(function (first: any, second: any) {
           return first.title.localeCompare(second.title);
         });
+
       return filtered_data.map((item: any) => (
         <Link href="/shows" style={{ textDecoration: 'none', color: '#EDF2F4' }}>
           <ImageListItem key={item.img} sx={{ borderRadius: 20 }}>
@@ -53,21 +46,12 @@ export default function App() {
                 style={{ objectFit: 'cover', width: '150px', height: '150px', borderRadius: '4px' }}
               />
             ) : (
-              <img
-                //local:///2024/test_123.jpeg
-                //btoa('local:///' + moment(first.startTime).year() + first.img)
-                //'http://localhost:5240/insecure/plain/' +'local:///' +moment(item.startTime).year() +'/' +item.img
-                src={`https://images.local/sig/${btoa(
-                  'local:///' + moment(item.startTime).year() + '/' + item.img,
-                )}`}
+              <Image
+                fill={true}
+                sizes="(max-width: 500px) 40vw, (max-width: 500px) 20vw, 15vw"
+                loading={'lazy'}
+                src={item.img}
                 alt={item.title}
-                loading="lazy"
-                style={{
-                  objectFit: 'cover',
-                  width: '150px',
-                  height: '150px',
-                  borderRadius: '4px',
-                }}
               />
             )}
 

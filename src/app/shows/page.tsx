@@ -62,12 +62,12 @@ export default function App() {
                 loading="lazy"
               />
             ) : (
-              <img
-                src={`https://images.local/sig/${btoa(
-                  'local:///' + moment(item.startTime).year() + '/' + item.img,
-                )}`}
+              <Image
+                fill={true}
+                sizes="(max-width: 500px) 40vw, (max-width: 500px) 20vw, 20vw"
+                loading={'lazy'}
+                src={item.img}
                 alt={item.title}
-                loading="lazy"
               />
             )}
             <Box

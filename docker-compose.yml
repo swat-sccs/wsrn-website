@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./public/archive:/app/public/archive
+      - wsrn-images:/data/images
     image: wsrn:v2.0
     env_file:
       - .env.local
@@ -21,7 +22,8 @@ services:
       labels:
         - 'traefik.enable=true'
         - 'traefik.http.routers.wsrn.entrypoints=https'
-        - 'traefik.http.routers.wsrn.rule=Host(`wsrnfm.com`, `www.wsrnfm.com`)'
+        - 'traefik.http.routers.wsrn.rule=((Host(`wsrnfm.com`) || Host(`www.wsrnfm.com`)) &&
+          !PathPrefix(`/iiif/`))'
         - 'traefik.http.routers.wsrn.tls=true'
         - 'traefik.http.routers.wsrn.tls.certresolver=letsEncrypt'
         - 'traefik.http.services.wsrn.loadbalancer.server.port=3000'
@@ -51,96 +53,35 @@ services:
     networks:
       - internal
 
-  imgproxy:
+  static:
+    image: edirom/cantaloupe
     restart: unless-stopped
-    image: darthsim/imgproxy:v3
-    container_name: imgproxy_app
+    volumes:
+      - wsrn-images:/opt/cantaloupe/images
+    configs:
+      - source: cantaloupe_conf
+        target: /etc/cantaloupe.properties
     deploy:
       placement:
         constraints:
           - node.role == manager
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.images.entrypoints=https'
-        - 'traefik.http.routers.images.rule=Host(`images.local`)'
-        - 'traefik.http.routers.images.tls=true'
-        - 'traefik.http.routers.images.tls.certresolver=letsEncrypt'
-        - 'traefik.http.services.images.loadbalancer.server.port=5240'
         - 'traefik.docker.network=traefik'
-    ports:
-      - 5240:5240
-    healthcheck:
-      test: ['CMD', 'imgproxy', 'health']
-      timeout: '10s'
-      interval: '10s'
-      retries: 3
-    hostname: images.local
-    volumes:
-      - ./data/images:/data/images
+        - 'traefik.port=80'
+        - 'traefik.http.routers.wsrn_static.entrypoints=https'
+        - 'traefik.http.routers.wsrn_static.rule=((Host(`wsrnfm.com`) || Host(`www.wsrnfm.com`)) &&
+          PathPrefix(`/iiif/`))'
+        - 'traefik.http.routers.wsrn_static.tls=true'
+        - 'traefik.http.routers.wsrn_static.tls.certresolver=letsEncrypt'
+        - 'traefik.http.services.wsrn_static.loadbalancer.server.port=8182'
     networks:
       - traefik
-    environment:
-      ### Server
-      ### See: https://docs.imgproxy.net/configuration/options#server
-      IMGPROXY_NETWORK: 'tcp'
-      IMGPROXY_BIND: ':5240'
+      - internal
 
-      ### Image sources
-      ### See: https://docs.imgproxy.net/configuration/options#image-sources
-      IMGPROXY_LOCAL_FILESYSTEM_ROOT: /data/images
-
-      ### Debug
-      ### See: https://docs.imgproxy.net/configuration/options#log
-      IMGPROXY_LOG_LEVEL: 'warn'
-      IMGPROXY_LOG_FORMAT: 'pretty'
-      IMGPROXY_DEVELOPMENT_ERRORS_MODE: 'false'
-      IMGPROXY_ENABLE_DEBUG_HEADERS: 'false'
-      IMGPROXY_REPORT_DOWNLOADING_ERRORS: 'false'
-
-      ### Client
-      IMGPROXY_READ_REQUEST_TIMEOUT: 10
-      IMGPROXY_TIMEOUT: 10
-      IMGPROXY_KEEP_ALIVE_TIMEOUT: 10
-      IMGPROXY_CLIENT_KEEP_ALIVE_TIMEOUT: 90
-      IMGPROXY_DOWNLOAD_TIMEOUT: 10
-      IMGPROXY_BASE_URL: ''
-      IMGPROXY_CACHE_CONTROL_PASSTHROUGH: 'false'
-      IMGPROXY_ETAG_BUSTER: ''
-      IMGPROXY_HEALTH_CHECK_PATH: ''
-      IMGPROXY_IGNORE_SSL_VERIFICATION: 'true'
-      IMGPROXY_MAX_CLIENTS: 2048
-      IMGPROXY_MAX_REDIRECTS: 10
-      IMGPROXY_PATH_PREFIX: ''
-      IMGPROXY_REQUESTS_QUEUE_SIZE: 0
-      IMGPROXY_SET_CANONICAL_HEADER: 'true'
-      IMGPROXY_SO_REUSEPORT: 'true'
-      IMGPROXY_TTL: 31536000
-      IMGPROXY_USE_ETAG: 'false'
-      IMGPROXY_USE_LAST_MODIFIED: 'false'
-
-      ### Preferred formats
-      ### See: https://docs.imgproxy.net/configuration/options#preferred-formats
-      IMGPROXY_PREFERRED_FORMATS: jpeg,png,gif
-
-      ### Skip processing
-      ### https://docs.imgproxy.net/configuration/options#skip-processing
-      IMGPROXY_SKIP_PROCESSING_FORMATS: 'svg,webp,avif'
-
-      ### Client Hints support
-      ### See: https://docs.imgproxy.net/configuration/options#client-hints-support
-      IMGPROXY_ENABLE_CLIENT_HINTS: 'true'
-
-      ### See: https://docs.imgproxy.net/configuration/options#miscellaneous
-      IMGPROXY_AUTO_ROTATE: 'true'
-      IMGPROXY_DISABLE_SHRINK_ON_LOAD: 'false'
-      IMGPROXY_ENFORCE_THUMBNAIL: 'false'
-      IMGPROXY_KEEP_COPYRIGHT: 'false'
-      IMGPROXY_RETURN_ATTACHMENT: 'false'
-      IMGPROXY_SANITIZE_SVG: 'true'
-      IMGPROXY_STRIP_COLOR_PROFILE: 'true'
-      IMGPROXY_STRIP_METADATA: 'true'
-      IMGPROXY_SVG_FIX_UNSUPPORTED: 'false'
-      IMGPROXY_USE_LINEAR_COLORSPACE: 'false'
+configs:
+  cantaloupe_conf:
+    file: ./cantaloupe.properties
 
 networks:
   traefik:
