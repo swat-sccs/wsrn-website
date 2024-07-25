@@ -43,15 +43,23 @@ export default function App() {
                 src={`/img/${item.img}`}
                 alt={item.title}
                 loading="lazy"
-                style={{ objectFit: 'cover', width: '11vw', height: '11vw', borderRadius: '4px' }}
+                style={{ width: '11vw', height: '11vw', borderRadius: '4px' }}
               />
             ) : (
               <Box
-                sx={{ width: '11vw', minHeight: '11vw', overflow: 'hidden', borderRadius: '4px' }}
+                sx={{
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  width: '9vw',
+                  height: '12vw',
+                  overflow: 'hidden',
+                  borderRadius: '4px',
+                  borderColor: 'white',
+                }}
               >
                 <Image
-                  style={{ borderRadius: '4px' }}
-                  objectFit={'cover'}
+                  style={{ borderRadius: '4px', objectPosition: 'center' }}
+                  objectFit="contain"
                   fill
                   sizes="(max-width: 1000px) 80vw, (max-width: 1000px) 20vw, 15vw"
                   loading={'lazy'}
@@ -109,7 +117,7 @@ export default function App() {
   return (
     <Container sx={{ overflowX: 'scroll', backgroundColor: 'primary.main', borderRadius: 4 }}>
       {!show_data_error && !show_data_isLoading ? (
-        <ImageList sx={{ overflowX: 'scroll' }} gap={20} cols={show_data.length} variant="quilted">
+        <ImageList sx={{ overflowX: 'scroll' }} gap={20} cols={5} variant="quilted">
           <RenderCards></RenderCards>
         </ImageList>
       ) : null}

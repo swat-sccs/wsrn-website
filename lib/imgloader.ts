@@ -21,7 +21,8 @@ export default function wsrnImgLoader({
     //       before it hits the service, so we specify $ as the separator in the config. To be fair, this is
     //       a stupid API.
     src = src.replaceAll(/(?!^)\//g, '$');
-    return `http://localhost:8182/iiif/3/${src}/square/^${width},/0/default.jpg`;
+    return `http://localhost:8182/iiif/3/${src}/full/${width},/0/default.jpg`;
+    //return `http://localhost:8182/iiif/3/${src}/square/^${width},/0/default.jpg`;
   } else if (env == 'production') {
     // do something
     if (src.includes('svg')) {

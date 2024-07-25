@@ -195,10 +195,12 @@ export default function App() {
     axios
       .post('/api/delete_show', row)
       .then(function (response) {
-        console.log(response);
+        setShowSuccessDelete(true);
+        setTimeout(() => {
+          setShowSuccessDelete(false);
+        }, 2000);
       })
       .catch(function (error) {
-        console.log(error);
         alert('error');
       });
   };
@@ -229,9 +231,9 @@ export default function App() {
       .put('/api/shows', data)
       .then(function (response) {
         console.log(response);
-        setShowSuccess(true);
+        setShowSuccessCreate(true);
         setTimeout(() => {
-          setShowSuccess(false);
+          setShowSuccessCreate(false);
         }, 2000);
       })
       .catch(function (error) {
@@ -246,7 +248,9 @@ export default function App() {
     setRowModesModel(newRowModesModel);
   };
 
-  const [showSuccess, setShowSuccess]: any = useState(false);
+  const [showSuccessCreate, setShowSuccessCreate]: any = useState(false);
+  const [showSuccessDelete, setShowSuccessDelete]: any = useState(false);
+
   const [currentlySelectedShow, setCurrentlySelectedShow]: any = useState({});
   //const [formData, setFormData]: any = useState({});
   const { register, handleSubmit } = useForm();
@@ -341,10 +345,17 @@ export default function App() {
 
   return (
     <Layout title="Manage">
-      <Fade in={showSuccess}>
-        <Box sx={{ width: '20%', position: 'absolute', top: '15%', right: '10%' }}>
+      <Fade in={showSuccessCreate}>
+        <Box sx={{ width: '20%', position: 'absolute', top: '15%', right: '40%' }}>
           <Alert variant="outlined" severity="success">
             Entry Updated!
+          </Alert>
+        </Box>
+      </Fade>
+      <Fade in={showSuccessDelete}>
+        <Box sx={{ width: '20%', position: 'absolute', top: '15%', right: '40%' }}>
+          <Alert variant="outlined" severity="success">
+            Entry Deleted!
           </Alert>
         </Box>
       </Fade>

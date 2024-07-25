@@ -63,10 +63,20 @@ export default function App() {
                 loading="lazy"
               />
             ) : (
-              <Box sx={{ width: '11vw', height: '11vw', overflow: 'hidden', borderRadius: '4px' }}>
+              <Box
+                sx={{
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  width: '9vw',
+                  height: '14vw',
+                  overflow: 'hidden',
+                  borderRadius: '4px',
+                  borderColor: 'white',
+                }}
+              >
                 <Image
-                  style={{ borderRadius: '4px' }}
-                  objectFit={'cover'}
+                  style={{ borderRadius: '4px', objectPosition: 'top' }}
+                  objectFit="contain"
                   fill
                   sizes="(max-width: 1000px) 80vw, (max-width: 1000px) 20vw, 15vw"
                   loading={'lazy'}
@@ -120,12 +130,6 @@ export default function App() {
                   </Typography>
                 </>
               }
-              actionIcon={
-                <IconButton
-                  sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  aria-label={`info about ${item.title}`}
-                ></IconButton>
-              }
             />
           </ImageListItem>
         ));
@@ -135,7 +139,7 @@ export default function App() {
   return (
     <Layout title="Shows">
       <Container sx={{ height: '65vh', overflowY: 'scroll' }}>
-        <ImageList sx={{ overflowY: 'scroll' }} gap={20} cols={4} variant="masonry">
+        <ImageList sx={{ overflowY: 'scroll' }} gap={20} cols={5} variant="masonry">
           <RenderCards></RenderCards>
         </ImageList>
       </Container>
