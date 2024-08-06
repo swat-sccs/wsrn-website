@@ -6,7 +6,7 @@ services:
     volumes:
       - ./public/archive:/app/public/archive
       - wsrn-images:/data/images
-    image: wsrn:v2.0
+    image: wsrn:v2.1
     env_file:
       - .env.local
     build:

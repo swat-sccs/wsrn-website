@@ -207,6 +207,7 @@ export default function Player() {
               <Grid container spacing={8}>
                 <Grid item>
                   <Typography
+                    fontSize="1rem"
                     variant="h6"
                     fontWeight="bold"
                     overflow="auto"
@@ -215,6 +216,7 @@ export default function Player() {
                     {showName.title}
                   </Typography>
                   <Typography
+                    fontSize="1rem"
                     variant="body1"
                     overflow="auto"
                     sx={{ mt: '1%', color: theme.palette.darkblue.main }}
@@ -226,7 +228,11 @@ export default function Player() {
                   <Grid item>
                     <Box
                       component="img"
-                      sx={{ maxHeight: { xs: 60 }, maxWidth: { xs: 60 }, borderRadius: 2 }}
+                      sx={{
+                        maxHeight: { xs: 60, lg: 60 },
+                        maxWidth: { xs: 60, lg: 60 },
+                        borderRadius: 2,
+                      }}
                       src={`data:image/png;base64, ${showName.album_art}`}
                     ></Box>
                   </Grid>
@@ -248,6 +254,7 @@ export default function Player() {
                 &nbsp;
               </Typography>
               <Typography
+                fontSize="1rem"
                 component="div"
                 variant="h6"
                 overflow="auto"
@@ -267,9 +274,10 @@ export default function Player() {
                 {/*
                 <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
                 */}
-                <Grid container spacing={8}>
-                  <Grid item>
+                <Grid container spacing={{ xs: 1, lg: 8 }}>
+                  <Grid item xs={9} lg={'auto'}>
                     <Typography
+                      fontSize="1rem"
                       variant="h5"
                       fontWeight="bold"
                       overflow="auto"
@@ -278,6 +286,7 @@ export default function Player() {
                       {showName.title}
                     </Typography>
                     <Typography
+                      fontSize="1rem"
                       variant="h6"
                       overflow="auto"
                       sx={{ mt: '1%', color: theme.palette.darkblue.main }}
@@ -287,7 +296,7 @@ export default function Player() {
                   </Grid>
 
                   {showName.album_art != 'null' ? (
-                    <Grid item>
+                    <Grid item xs={3} lg={'auto'} sx={{ mt: -1.5 }}>
                       <Box
                         sx={{
                           width: 65,
@@ -305,7 +314,11 @@ export default function Player() {
                           <Grid item>
                             <Box
                               component="img"
-                              sx={{ maxHeight: { xs: 60 }, maxWidth: { xs: 60 }, borderRadius: 2 }}
+                              sx={{
+                                maxHeight: { xs: 65, lg: 60 },
+                                maxWidth: { xs: 65, lg: 60 },
+                                borderRadius: 2,
+                              }}
                               src={`data:image/png;base64, ${showName.album_art}`}
                             ></Box>
                           </Grid>
@@ -415,7 +428,7 @@ export default function Player() {
     //setAudio(new Audio('https://icecast.wsrn.sccs.swarthmore.edu/listen'));
     setWindowSize([window.innerWidth, window.innerHeight]);
     if (window.innerWidth < 500) {
-      setBottomHeight('12vh');
+      setBottomHeight('15vh');
     }
   }, []);
 
@@ -444,7 +457,7 @@ export default function Player() {
         ></Box>
         {windowSize[0] > 600 ? (
           <Typography
-            sx={{ position: 'absolute', bottom: 0, right: 0, mr: '1%', mb: '1%' }}
+            sx={{ position: 'absolute', bottom: 0, right: 0, mr: '1%', mb: '0.5%' }}
             onClick={() => openInNewTab('https://publicfiles.fcc.gov/fm-profile/wsrn-fm')}
             variant="body1"
             style={{ cursor: 'pointer' }}
@@ -460,7 +473,7 @@ export default function Player() {
             height: '12%',
             boxShadow: 0,
             position: 'fixed',
-            bottom: 0,
+            bottom: { xs: 20, lg: 0 },
             backgroundColor: theme.palette.primary.main,
             borderRadius: '10px',
             zIndex: 10,
@@ -481,7 +494,7 @@ export default function Player() {
                 <PlayPauseComponent></PlayPauseComponent>
               </Grid>
             )}
-            <Grid item xs={8} lg={'auto'} sx={{ pr: 5 }}>
+            <Grid item xs={9} lg={'auto'} sx={{ pr: 5 }}>
               <div sx={{ color: theme.palette.darkblue.main }}>
                 <RenderPlayer />
               </div>
