@@ -32,10 +32,12 @@ function ResponsiveAppBar(props: any) {
   let authenticated: any;
   let loginLink;
   let nameButton;
+  let managerStatus;
 
   if (props.hasOwnProperty('login')) {
     loginLink = null;
     nameButton = null;
+    managerStatus = null;
   } else {
     if (status === 'authenticated') {
       authenticated = true;
@@ -49,6 +51,7 @@ function ResponsiveAppBar(props: any) {
         </Button>
       );
       nameButton = session.user?.name;
+      managerStatus = session.user?.role;
     } else {
       authenticated = false;
       loginLink = <div></div>;

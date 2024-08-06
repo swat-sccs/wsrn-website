@@ -13,7 +13,7 @@ export const config = {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
-          //role: profile.groups.find((group: string) => group === 'manager') || '',
+          role: profile.groups.find((group: string) => group === 'admin') || 'user',
         };
       },
       clientId: process.env.KEYCLOAK_ID || '',
@@ -40,6 +40,19 @@ export const config = {
         // Or you can return a URL to redirect to:
         // return '/unauthorized'
       }
+    },
+    jwt({ token, account, profile, user }) {
+      if (user) token.role = user.role;
+
+      return token;
+    },
+    session({ session, token }) {
+      if (session && session.user) {
+        // @ts-ignore
+        session.user.role = token.role;
+      }
+
+      return session;
     },
   },
   /*

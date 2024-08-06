@@ -36,38 +36,25 @@ export default function Home() {
         </>
       }
     >
-      <Container sx={{ overflowX: 'hidden' }}>
-        {windowSize[0] > 600 ? (
-          <Box sx={{ mt: 2 }}>
-            <Grid container direction="row" justifyContent={'space-evenly'} spacing={5}>
-              <Grid container item xs={7} spacing={2} justifyContent="space-between">
-                <Grid item xs={12}>
-                  <ShowComp />
-                </Grid>
-                <Grid item xs={12}>
-                  <About />
-                </Grid>
+      <Container sx={{ overflowX: 'hidden', overflowY: 'scroll' }}>
+        <Box sx={{ mt: 2 }}>
+          <Grid container direction="row" justifyContent={'space-evenly'} spacing={5}>
+            <Grid container item xs={12} lg={7} spacing={2} justifyContent="space-between">
+              <Grid item xs={12} lg={12}>
+                <ShowComp />
               </Grid>
-              <Grid item xs={5}>
-                <Grid item>
-                  <Upcoming />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Box>
-        ) : null}
-        {windowSize[0] < 600 ? (
-          <Grid item xs={12} sm={6}>
-            <Box sx={{ mt: '10%' }}>
-              <Grid item xs={12}>
-                <Calendar />
-              </Grid>
-              <Grid item xs={12} sx={{ mb: '50%' }}>
+              <Grid item display={{ xs: 'none' }} lg={12}>
                 <About />
               </Grid>
-            </Box>
+            </Grid>
+            <Grid item xs={12} lg={5}>
+              {/*Kind of a cheaty fix to add a little extra room to scroll on mobile */}
+              <Grid item mb={{ xs: 20, md: 0 }}>
+                <Upcoming />
+              </Grid>
+            </Grid>
           </Grid>
-        ) : null}
+        </Box>
       </Container>
     </Layout>
   );

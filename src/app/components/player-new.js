@@ -415,7 +415,7 @@ export default function Player() {
     //setAudio(new Audio('https://icecast.wsrn.sccs.swarthmore.edu/listen'));
     setWindowSize([window.innerWidth, window.innerHeight]);
     if (window.innerWidth < 500) {
-      setBottomHeight('16vh');
+      setBottomHeight('12vh');
     }
   }, []);
 
@@ -432,6 +432,16 @@ export default function Player() {
           backgroundColor: theme.palette.primary.main,
         }}
       >
+        <Box
+          sx={{
+            backgroundColor: 'darkblue.main',
+            zIndex: 10,
+            width: '100vw',
+            height: '60%',
+            position: 'relative',
+            top: -12,
+          }}
+        ></Box>
         {windowSize[0] > 600 ? (
           <Typography
             sx={{ position: 'absolute', bottom: 0, right: 0, mr: '1%', mb: '1%' }}
@@ -460,6 +470,8 @@ export default function Player() {
             <Grid item xs={12}>
               <Loading />
             </Grid>
+
+            {/*mobile */}
             {windowSize[0] < 600 ? (
               <Grid item xs={3}>
                 <PlayPauseComponent></PlayPauseComponent>

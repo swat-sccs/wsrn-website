@@ -4,12 +4,7 @@
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import Link from 'next/link';
 
-///Does this give make me cry every time I look at it.... maybe
-// does it work?
-// fuck yea
-// for now
-// lol
-// If it breaks find me on github @DCRepublic
+// If it breaks lol find me on github @DCRepublic
 
 const Layout = ({ title, children }) => (
   <div>
@@ -24,8 +19,13 @@ const Layout = ({ title, children }) => (
             alignItems={'flex-start'}
           >
             <Grid container item xs={12} sm={6} alignItems={'flex-start'}>
-              <Grid container direction="row" justifyConent="space-evenly" spacing={5}>
-                <Grid item xs={12} sm={'auto'}>
+              <Grid
+                container
+                direction="row"
+                justifyContent={{ xs: 'center', lg: 'space-evenly' }}
+                spacing={{ sm: '1', lg: '8' }}
+              >
+                <Grid item lg={'auto'} sm={'auto'}>
                   <Link href="/" passHref style={{ textDecoration: 'none', color: '#EDF2F4' }}>
                     <Typography style={{}} variant="h1">
                       WSRN
@@ -33,7 +33,7 @@ const Layout = ({ title, children }) => (
                   </Link>
                 </Grid>
 
-                <Grid item xs={12} sm={'auto'} sx={{ mt: 3 }}>
+                <Grid item lg={'auto'} sx={{ mt: 3 }}>
                   <Typography style={{}} variant="h3">
                     {title}
                   </Typography>
@@ -42,7 +42,12 @@ const Layout = ({ title, children }) => (
             </Grid>
 
             <Grid item xs={12} sm={6} sx={{ mt: '5%' }} justifyContent="flex-end">
-              <Grid container direction="row" spacing={5} justifyContent="flex-end">
+              <Grid
+                container
+                direction="row"
+                spacing={5}
+                justifyContent={{ xs: 'center', lg: 'flex-end' }}
+              >
                 <Grid item>
                   <Link href="/archives" passHref style={{ textDecoration: 'none' }}>
                     <Typography variant="h5" color="white">
@@ -62,8 +67,8 @@ const Layout = ({ title, children }) => (
           </Grid>
         </Grid>
 
-        <Grid container justifyContent="space-between" item>
-          <Typography style={{}} variant="body1" sx={{ mb: -1 }}>
+        <Grid container justifyContent={{ xs: 'center', lg: 'space-between' }} item>
+          <Typography style={{}} variant="body1" sx={{ mb: -1 }} mt={{ xs: 2, lg: 0 }}>
             Worldwide · Swarthmore · Radio · Network
           </Typography>
         </Grid>

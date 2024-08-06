@@ -7,7 +7,7 @@ export default async function SideBar({ children }: { children: React.ReactNode 
   //const handler = NextAuth(config);
   const session: any = await getServerSession(config);
 
-  if (session) {
+  if (session && session.user.role === 'admin') {
     return <section>{children}</section>;
   }
   redirect('/login');
