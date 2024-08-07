@@ -44,7 +44,6 @@ export default function Player() {
   const [bottomHeight, setBottomHeight] = React.useState('7vh');
   const [STREAM, setSTREAM] = React.useState(null);
   const [_analyser, set_analyser] = React.useState(null);
-  const [metadata, setMetadata] = React.useState({ title: 'Listen to WSRN!', listeners: 0 });
 
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
   const station = {
@@ -107,25 +106,6 @@ export default function Player() {
   } = useSWR('/api/states', fetcher, {
     refreshInterval: 5000,
   });
-
-  useEffect(() => {
-    //If metadata is found try and look for the rest of the data
-    let _metadata = { title: 'Listen to WSRN!', listeners: 0 };
-    if (STREAM) {
-      _metadata = data.source.find((source) => source.title == STREAM);
-      if (!_metadata) {
-        _metadata = { title: 'Listen to WSRN!', listeners: 0 };
-      }
-    }
-    console.log(_metadata);
-
-    if (_metadata.hasOwnProperty('listeners')) {
-      setMetadata(_metadata);
-    } else {
-      _metadata['listeners'] = 0;
-      setMetadata(_metadata);
-    }
-  }, [STREAM, data]);
 
   const togglePlaying = useCallback(() => {
     console.log('Trying to play');
@@ -274,7 +254,7 @@ export default function Player() {
                 {/*
                 <Headphones sx={{ height: 20, width: 20 }} /> {metadata.listeners}
                 */}
-                <Grid container spacing={{ xs: 1, lg: 8 }}>
+                <Grid container spacing={{ xs: 2, lg: 8 }}>
                   <Grid item xs={9} lg={'auto'}>
                     <Typography
                       fontSize="1rem"
