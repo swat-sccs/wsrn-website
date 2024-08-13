@@ -43,7 +43,7 @@ export default function Home() {
               <Grid item xs={12} lg={12}>
                 <ShowComp />
               </Grid>
-              <Grid item display={{ xs: 'none' }} lg={12}>
+              <Grid item display={{ xs: 'none', lg: 'block' }} lg={12}>
                 <About />
               </Grid>
             </Grid>
