@@ -278,6 +278,12 @@ export default function App() {
     width: 1,
   });
 
+  const handleSkip = () => {
+    axios.get('/api/admin').then((response) => {
+      console.log(response);
+    });
+  };
+
   const handleComplete = (showData: any) => {
     const form: any = document.getElementById('form');
     //const fileInput: any = document.getElementById('fileInput'); // Replace with your HTML element ID
@@ -517,6 +523,7 @@ export default function App() {
         <Grid container justifyContent="space-between">
           <Grid item>
             <Button onClick={handleClickOpen}>New Show</Button>
+            <Button onClick={handleSkip}>SKIP</Button>
           </Grid>
           <Grid item>
             <Auth></Auth>

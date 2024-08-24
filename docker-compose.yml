@@ -22,7 +22,7 @@ services:
         - 'traefik.enable=true'
         - 'traefik.http.routers.wsrn.entrypoints=https'
         - 'traefik.http.routers.wsrn.rule=((Host(`wsrnfm.com`) || Host(`www.wsrnfm.com`)) &&
-          !PathPrefix(`/iiif/`))'
+          !PathPrefix(`/iiif/`)) && !PathPrefix(`/admin/`))'
         - 'traefik.http.routers.wsrn.tls=true'
         - 'traefik.http.routers.wsrn.tls.certresolver=letsEncrypt'
         - 'traefik.http.services.wsrn.loadbalancer.server.port=3000'
