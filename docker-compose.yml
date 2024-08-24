@@ -2,7 +2,8 @@ services:
   wsrn:
     restart: unless-stopped
     volumes:
-      - ./public/archive:/app/public/archive
+      #- ./public/archive:/app/public/archive
+      - wsrn-archive:/app/public/archive
       - wsrn-images:/data/images
     image: wsrn:v2.1
     env_file:
@@ -100,3 +101,10 @@ volumes:
       type: nfs
       o: 'nfsvers=4,addr=130.58.218.26,rw,nolock,soft'
       device: ':/volumes/wsrn/data'
+
+  wsrn-archive:
+    name: wsrn-archive
+    driver_opts:
+      type: nfs
+      o: 'nfsvers=4,addr=130.58.218.26,rw,nolock,soft'
+      device: ':/volumes/dcrepublic/wsrn/archive'

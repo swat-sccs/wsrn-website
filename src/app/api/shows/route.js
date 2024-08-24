@@ -51,7 +51,7 @@ export async function PUT(request) {
       dj: req.updatedRow.dj,
       startTime: req.updatedRow.startTime,
       endTime: req.updatedRow.endTime,
-      dotw: Numbers(req.updatedRow.dotw),
+      dotw: Number(req.updatedRow.dotw),
       description: req.updatedRow.description,
     },
   });

@@ -32,7 +32,7 @@ export default function UpcomingShows() {
             <Grid container justifyContent="flex-start" alignItems="center" spacing="50">
               <Grid item>
                 <Typography fontWeight={'bold'} sx={{ color: '#31485E', ml: 2 }}>
-                  {moment(show.startTime).format('LT')}
+                  {moment(show.startTime).format('LT')} - {moment(show.endTime).format('LT')}
                 </Typography>
               </Grid>
               <Grid item>
@@ -56,7 +56,14 @@ export default function UpcomingShows() {
 
   return (
     <Container
-      sx={{ width: '100%', height: '60vh', backgroundColor: 'primary.main', borderRadius: 4 }}
+      sx={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexFlow: 'column',
+        backgroundColor: 'primary.main',
+        borderRadius: 4,
+      }}
     >
       <Typography
         textAlign={'center'}

@@ -7,6 +7,7 @@ let link = process.env.IP;
 
 export async function GET(request) {
   let data = {};
+  let data2 = {};
   await axios
     .get(link, {
       headers: {
@@ -17,6 +18,10 @@ export async function GET(request) {
     .then((res) => {
       data = res.data;
     });
+  await axios.get('https://icecast.wsrn.sccs.swarthmore.edu/status-json.xsl').then((res) => {
+    data2 = res.data.icestats;
+  });
+  data['stats'] = data2;
 
   return NextResponse.json(data);
 }

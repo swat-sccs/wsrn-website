@@ -34,6 +34,7 @@ export default function Player() {
   const pathname = usePathname();
   const [audio, setAudio] = useState(null);
   const [playing, setPlaying] = React.useState(false);
+  const [metadata, setMetadata] = React.useState(null);
   const [audioLoad, setAudioLoad] = React.useState(false);
   const [currentShow, setCurrentShow] = React.useState(false);
   const [windowSize, setWindowSize] = React.useState([]);
@@ -42,7 +43,7 @@ export default function Player() {
   const [analyzerData, setAnalyzerData] = useState(null);
   const [audioContext, setAudioContext] = useState(null);
   const [bottomHeight, setBottomHeight] = React.useState('7vh');
-  const [STREAM, setSTREAM] = React.useState(null);
+  const [STREAM, setSTREAM] = React.useState('Listen to WSRN!');
   const [_analyser, set_analyser] = React.useState(null);
 
   const url = 'https://icecast.wsrn.sccs.swarthmore.edu';
@@ -59,6 +60,7 @@ export default function Player() {
 
   useEffect(() => {
     if (!audioElement) return;
+
     const loadPlayer = async () => {
       const { default: IcecastMetadataPlayer } = await import(`icecast-metadata-player`);
 
@@ -71,6 +73,8 @@ export default function Player() {
           endpoints: station.endpoints,
           onMetadata: async (metadata) => {
             //STREAM.title = metadata.StreamTitle;
+            console.log(metadata);
+            setMetadata(metadata);
             setSTREAM(metadata.StreamTitle);
             setAudioLoad(false);
           },
@@ -180,30 +184,36 @@ export default function Player() {
   const RenderPlayer = () => {
     if (showName) {
       if (!isLoading && !error && !showName_isLoading) {
-        //If Live But with title
+        //If Live But with title then use title from mac rip
         if (showName.title != 'null' && showName.live_state == 1) {
           return (
             <>
-              <Grid container spacing={8}>
+              <Grid container spacing={0} justifyContent="space-evenly" alignItems="center">
                 <Grid item>
                   <Typography
                     fontSize="1rem"
                     variant="h6"
                     fontWeight="bold"
                     overflow="auto"
-                    sx={{ mt: '1%', color: theme.palette.darkblue.main }}
+                    display="flex"
+                    flex-direction="row"
+                    sx={{ mt: '10%', color: theme.palette.darkblue.main }}
                   >
                     {showName.title}
                   </Typography>
                   <Typography
                     fontSize="1rem"
-                    variant="body1"
+                    variant="h6"
+                    fontWeight="bold"
                     overflow="auto"
-                    sx={{ mt: '1%', color: theme.palette.darkblue.main }}
+                    display="flex"
+                    flex-direction="row"
+                    sx={{ mt: '2%', color: theme.palette.darkblue.main }}
                   >
                     {showName.artist}
                   </Typography>
                 </Grid>
+                {/*
                 {showName.album_art != 'null' ? (
                   <Grid item>
                     <Box
@@ -217,6 +227,7 @@ export default function Player() {
                     ></Box>
                   </Grid>
                 ) : null}
+                  */}
               </Grid>
             </>
           );
@@ -245,7 +256,7 @@ export default function Player() {
             </>
           );
         } else {
-          //Not live
+          //Not live so using sttas from icecast streamer
 
           if (showName.title != 'null' && showName.live_state == 0) {
             return (
@@ -263,49 +274,16 @@ export default function Player() {
                       overflow="auto"
                       sx={{ color: theme.palette.darkblue.main }}
                     >
-                      {showName.title}
+                      {showName.stats.source.title}
                     </Typography>
+
                     <Typography
                       fontSize="1rem"
                       variant="h6"
                       overflow="auto"
                       sx={{ mt: '1%', color: theme.palette.darkblue.main }}
-                    >
-                      {showName.artist}
-                    </Typography>
+                    ></Typography>
                   </Grid>
-
-                  {showName.album_art != 'null' ? (
-                    <Grid item xs={3} lg={'auto'} sx={{ mt: -1.5 }}>
-                      <Box
-                        sx={{
-                          width: 65,
-                          height: 65,
-                          backgroundColor: 'primary.main',
-                          borderRadius: 2,
-                        }}
-                      >
-                        <Grid
-                          container
-                          justifyContent="center"
-                          alignItems="center"
-                          direction="column"
-                        >
-                          <Grid item>
-                            <Box
-                              component="img"
-                              sx={{
-                                maxHeight: { xs: 65, lg: 60 },
-                                maxWidth: { xs: 65, lg: 60 },
-                                borderRadius: 2,
-                              }}
-                              src={`data:image/png;base64, ${showName.album_art}`}
-                            ></Box>
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </Grid>
-                  ) : null}
                 </Grid>
               </>
             );
@@ -336,9 +314,7 @@ export default function Player() {
           variant="h6"
           overflow="auto"
           sx={{ mt: '1%', color: theme.palette.darkblue.main }}
-        >
-          Listen to WSRN!
-        </Typography>
+        ></Typography>
       </>
     );
   };

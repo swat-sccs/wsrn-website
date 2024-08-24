@@ -7,7 +7,7 @@ import Link from 'next/link';
 import Layout from '@/app/components/layout';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Upcoming from '@/app/components/upcoming_shows';
-
+import CurrentShow from '@/app/components/now_playing_show';
 import ShowComp from '@/app/components/show_comp';
 
 export default function Home() {
@@ -47,10 +47,22 @@ export default function Home() {
                 <About />
               </Grid>
             </Grid>
-            <Grid item xs={12} lg={5}>
+            <Grid
+              item
+              xs={12}
+              lg={5}
+              container
+              direction="column"
+              justifyContent="flex-start"
+              spacing={2}
+              alignContent="flex-end"
+            >
               {/*Kind of a cheaty fix to add a little extra room to scroll on mobile */}
-              <Grid item mb={{ xs: 20, md: 0 }}>
+              <Grid item mb={{ xs: 20, md: 0 }} sx={{ minHeight: { lg: '32vh' } }}>
                 <Upcoming />
+              </Grid>
+              <Grid item container mb={{ xs: 10, md: 0 }}>
+                <CurrentShow />
               </Grid>
             </Grid>
           </Grid>
