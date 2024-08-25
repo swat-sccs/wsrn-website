@@ -5,7 +5,7 @@ services:
       #- ./public/archive:/app/public/archive
       - wsrn-archive:/app/public/archive
       - wsrn-images:/data/images
-    image: wsrn:v2.1
+    image: wsrn:latest
     env_file:
       - .env.local
     build:
@@ -22,7 +22,7 @@ services:
         - 'traefik.enable=true'
         - 'traefik.http.routers.wsrn.entrypoints=https'
         - 'traefik.http.routers.wsrn.rule=((Host(`wsrnfm.com`) || Host(`www.wsrnfm.com`)) &&
-          !PathPrefix(`/iiif/`)) && !PathPrefix(`/admin/`))'
+          !PathPrefix(`/iiif/`, `/admin/`))'
         - 'traefik.http.routers.wsrn.tls=true'
         - 'traefik.http.routers.wsrn.tls.certresolver=letsEncrypt'
         - 'traefik.http.services.wsrn.loadbalancer.server.port=3000'
@@ -107,4 +107,4 @@ volumes:
     driver_opts:
       type: nfs
       o: 'nfsvers=4,addr=130.58.218.26,rw,nolock,soft'
-      device: ':/volumes/dcrepublic/wsrn/archive'
+      device: ':/volumes/wsrn/web/station_data/wsrn/media/playable'

@@ -42,7 +42,7 @@ export default function Player() {
   const [audioElement, setAudioElement] = React.useState(null);
   const [analyzerData, setAnalyzerData] = useState(null);
   const [audioContext, setAudioContext] = useState(null);
-  const [bottomHeight, setBottomHeight] = React.useState('7vh');
+  const [bottomHeight, setBottomHeight] = React.useState('8vh');
   const [STREAM, setSTREAM] = React.useState('Listen to WSRN!');
   const [_analyser, set_analyser] = React.useState(null);
 
@@ -426,7 +426,7 @@ export default function Player() {
       <Grid container justifyContent="center" alignItems="center" sx={{ display: 'flex' }}>
         <Box
           sx={{
-            height: '12%',
+            height: '16%',
             boxShadow: 0,
             position: 'fixed',
             bottom: { xs: 20, lg: 0 },
@@ -447,13 +447,19 @@ export default function Player() {
               </Grid>
             ) : (
               <Grid item lg={'auto'}>
-                <PlayPauseComponent></PlayPauseComponent>
+                {/*<PlayPauseComponent></PlayPauseComponent>*/}
               </Grid>
             )}
             <Grid item xs={9} lg={'auto'} sx={{ pr: 5 }}>
-              <div sx={{ color: theme.palette.darkblue.main }}>
-                <RenderPlayer />
-              </div>
+              <Box sx={{ color: theme.palette.darkblue.main, p: 2 }}>
+                {/*<RenderPlayer />*/}
+                <iframe
+                  allowTransparency
+                  frameBorder={0}
+                  style={{ width: '100%' }}
+                  src="https://admin.wsrnfm.com/public/wsrn/embed"
+                ></iframe>
+              </Box>
             </Grid>
           </Grid>
         </Box>

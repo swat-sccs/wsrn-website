@@ -115,12 +115,22 @@ export default function App() {
   };
 
   return (
-    <Container sx={{ overflowX: 'scroll', backgroundColor: 'primary.main', borderRadius: 4 }}>
-      {!show_data_error && !show_data_isLoading && show_data.length > 0 ? (
+    <Container sx={{ overflowX: 'clip', borderRadius: 4 }}>
+      {/*{!show_data_error && !show_data_isLoading && show_data.length > 0 ? (
         <ImageList sx={{ overflowX: 'scroll' }} gap={20} cols={5} variant="quilted">
           <RenderCards></RenderCards>
         </ImageList>
-      ) : null}
+      ) : null}*/}
+      <iframe
+        allowTransparency
+        src="https://admin.wsrnfm.com/public/wsrn/schedule/embed?theme=dark"
+        frameBorder="0"
+        style={{
+          width: '100%',
+          minHeight: '500px',
+          border: '0',
+        }}
+      ></iframe>
     </Container>
   );
 }

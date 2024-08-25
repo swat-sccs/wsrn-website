@@ -43,9 +43,7 @@ export default function Home() {
               <Grid item xs={12} lg={12}>
                 <ShowComp />
               </Grid>
-              <Grid item display={{ xs: 'none', lg: 'block' }} lg={12}>
-                <About />
-              </Grid>
+              <Grid item display={{ xs: 'none', lg: 'block' }} lg={12}></Grid>
             </Grid>
             <Grid
               item
@@ -59,7 +57,8 @@ export default function Home() {
             >
               {/*Kind of a cheaty fix to add a little extra room to scroll on mobile */}
               <Grid item mb={{ xs: 20, md: 0 }} sx={{ minHeight: { lg: '32vh' } }}>
-                <Upcoming />
+                {/*<Upcoming />*/}
+                <About />
               </Grid>
               <Grid item container mb={{ xs: 10, md: 0 }}>
                 <CurrentShow />

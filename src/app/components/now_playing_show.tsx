@@ -106,21 +106,41 @@ export default function UpcomingShows() {
   };
 
   return (
-    <Container
-      sx={{
-        backgroundColor: 'primary.main',
-        borderRadius: 4,
-      }}
-    >
-      <Typography
-        textAlign={'center'}
-        variant="h5"
-        fontWeight={'bold'}
-        sx={{ p: 2, color: 'darkblue.main' }}
+    <>
+      <Container
+        sx={{
+          backgroundColor: 'primary.main',
+          borderRadius: 4,
+          height: '23vh',
+        }}
       >
-        • Now Playing •
-      </Typography>
-      <RenderNowPlaying></RenderNowPlaying>
-    </Container>
+        <Typography variant="h5" sx={{ color: 'darkblue.main', textAlign: 'center', mt: 2 }}>
+          Recently Played
+        </Typography>
+
+        <Box
+          sx={{
+            height: '17vh',
+            overflow: 'scroll',
+          }}
+        >
+          <div style={{ overflow: ' hidden' }}>
+            <iframe
+              allowTransparency
+              frameBorder={0}
+              scrolling="no"
+              style={{
+                width: '100%',
+                overflow: 'auto',
+                height: '300px',
+                padding: 6,
+                color: 'darkblue.main',
+              }}
+              src="https://admin.wsrnfm.com/public/wsrn/history?theme=dark"
+            ></iframe>
+          </div>
+        </Box>
+      </Container>
+    </>
   );
 }
