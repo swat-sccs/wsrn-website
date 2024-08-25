@@ -443,14 +443,14 @@ export default function Player() {
             {/*mobile */}
             {windowSize[0] < 600 ? (
               <Grid item xs={3}>
-                <PlayPauseComponent></PlayPauseComponent>
+                {/*<PlayPauseComponent></PlayPauseComponent>*/}
               </Grid>
             ) : (
               <Grid item lg={'auto'}>
                 {/*<PlayPauseComponent></PlayPauseComponent>*/}
               </Grid>
             )}
-            <Grid item xs={9} lg={'auto'} sx={{ pr: 5 }}>
+            <Grid item xs={12} lg={'auto'} sx={{ pr: 5 }}>
               <Box sx={{ color: theme.palette.darkblue.main, p: 2 }}>
                 {/*<RenderPlayer />*/}
                 <iframe

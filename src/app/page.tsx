@@ -60,7 +60,7 @@ export default function Home() {
                 {/*<Upcoming />*/}
                 <About />
               </Grid>
-              <Grid item container mb={{ xs: 10, md: 0 }}>
+              <Grid item container mt={{ xs: -12, lg: 0 }} mb={{ xs: 22, md: 0 }}>
                 <CurrentShow />
               </Grid>
             </Grid>
