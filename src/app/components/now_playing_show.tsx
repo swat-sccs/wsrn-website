@@ -121,24 +121,22 @@ export default function UpcomingShows() {
         <Box
           sx={{
             height: '17vh',
-            overflow: 'scroll',
+            overflowY: 'scroll',
           }}
         >
-          <div style={{ overflow: ' hidden' }}>
-            <iframe
-              allowTransparency
-              frameBorder={0}
-              scrolling="no"
-              style={{
-                width: '100%',
-                overflow: 'auto',
-                height: '300px',
-                padding: 6,
-                color: 'darkblue.main',
-              }}
-              src="https://admin.wsrnfm.com/public/wsrn/history?theme=dark"
-            ></iframe>
-          </div>
+          <iframe
+            allowTransparency
+            frameBorder={0}
+            scrolling="no"
+            style={{
+              width: '100%',
+              overflow: 'auto',
+              height: '550px',
+              padding: 6,
+              color: 'darkblue.main',
+            }}
+            src="https://admin.wsrnfm.com/public/wsrn/history?theme=dark"
+          ></iframe>
         </Box>
       </Container>
     </>

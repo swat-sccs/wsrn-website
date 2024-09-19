@@ -16,7 +16,11 @@ import { InvertColors } from '@mui/icons-material';
 const itemData: any = [];
 
 export default function App() {
-  const [WindowSize, setWindowSize]: any = useState({ width: 0, height: 0 });
+  const [WindowSize, setWindowSize]: any = useState({});
+  React.useEffect(() => {
+    setWindowSize([window.innerWidth, window.innerHeight]);
+  }, []);
+
   const fetcher = (url: any) => fetch(url).then((res) => res.json());
   const {
     data: show_data,
@@ -136,18 +140,35 @@ export default function App() {
        
        */}
 
-      <iframe
-        allowTransparency
-        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FNew_York&bgcolor=%234285F4&mode=WEEK&showTitle=0&showPrint=0&showCalendars=0&title=WSRN&src=Y18yMGVmYmEzZTM3OWNiNTg0ZTQ2Nzc2NzM1YTBjZTJmMTQ3ZGU2NTk1YjgyMzBlMjA4MjYzM2EwNjUxODNhMWMwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23D50000"
-        style={{
-          border: 0,
-          width: '100%',
-          height: '500px',
-          filter: 'invert(80%) hue-rotate(180deg) ',
-        }}
-        frameBorder="0"
-        scrolling="no"
-      ></iframe>
+      {WindowSize[0] > 500 ? (
+        <iframe
+          allowTransparency
+          src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FNew_York&showPrint=0&mode=AGENDA&showTz=0&title=Show%20Schedule&src=Y18yMGVmYmEzZTM3OWNiNTg0ZTQ2Nzc2NzM1YTBjZTJmMTQ3ZGU2NTk1YjgyMzBlMjA4MjYzM2EwNjUxODNhMWMwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23D50000"
+          style={{
+            border: 0,
+            width: '100%',
+            height: '500px',
+            filter: 'invert(90%) hue-rotate(180deg) contrast(80%)',
+            borderRadius: '20px',
+          }}
+          frameBorder="0"
+          scrolling="no"
+        ></iframe>
+      ) : (
+        <iframe
+          allowTransparency
+          src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FNew_York&showPrint=0&mode=AGENDA&showTz=0&title=Show%20Schedule&src=Y18yMGVmYmEzZTM3OWNiNTg0ZTQ2Nzc2NzM1YTBjZTJmMTQ3ZGU2NTk1YjgyMzBlMjA4MjYzM2EwNjUxODNhMWMwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23D50000"
+          style={{
+            border: 0,
+            width: '100%',
+            height: '300px',
+            filter: 'invert(90%) hue-rotate(180deg) contrast(80%)',
+            borderRadius: '20px',
+          }}
+          frameBorder="0"
+          scrolling="no"
+        ></iframe>
+      )}
     </Container>
   );
 }

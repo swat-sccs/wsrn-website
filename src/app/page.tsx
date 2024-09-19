@@ -15,7 +15,6 @@ export default function Home() {
   const [audio, setAudio]: any[] = useState(null);
   const [playing, setPlaying] = React.useState(false);
   const [audioLoad, setAudioLoad] = React.useState(false);
-
   React.useEffect(() => {
     setWindowSize([window.innerWidth, window.innerHeight]);
     if (window.innerWidth < 600) {
