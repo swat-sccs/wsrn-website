@@ -27,112 +27,117 @@ export default function App() {
     data: show_data,
     error: show_data_error,
     isLoading: show_data_isLoading,
-  } = useSWR('/api/shows', fetcher, {
-    refreshInterval: 2000,
+  } = useSWR('/api/cal', fetcher, {
+    refreshInterval: 20000,
   });
 
   const RenderCards = () => {
     if (!show_data_isLoading && !show_data_error) {
-      let array_tosort = show_data;
-
-      return array_tosort
-        .sort(function (first: any, second: any) {
-          return moment(second.startTime).diff(moment(first.startTime));
-        })
-        .map((item: any) => (
-          <ImageListItem key={item.img} sx={{ borderRadius: 20 }}>
-            <Chip
-              sx={{
-                position: 'absolute',
-                top: 10,
-                left: 10,
-                backgroundColor: 'primary.main',
-                color: 'darkblue.main',
-                fontWeight: 'bold',
-                zIndex: 10,
-              }}
-              label={moment(item.startTime).year()}
-              variant="filled"
-            ></Chip>
-            {item.img == 'wsrn2.png' ? (
-              //Default case if no image was provided by the user
-              <img
-                srcSet={`/img/${item.img}`}
-                src={`/img/${item.img}`}
-                alt={item.title}
-                loading="lazy"
-              />
-            ) : (
-              <Box
-                sx={{
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  width: '9vw',
-                  height: '14vw',
-                  overflow: 'hidden',
-                  borderRadius: '4px',
-                  borderColor: 'white',
-                }}
-              >
-                <Image
-                  style={{ borderRadius: '4px', objectPosition: 'top' }}
-                  objectFit="contain"
-                  fill
-                  sizes="(max-width: 1000px) 80vw, (max-width: 1000px) 20vw, 15vw"
-                  loading={'lazy'}
-                  src={item.img}
-                  alt={item.title}
-                />
-              </Box>
-            )}
+      return show_data.map((item: any) => (
+        <ImageListItem key={item.Name} sx={{ borderRadius: 20 }}>
+          <Chip
+            sx={{
+              position: 'absolute',
+              top: 10,
+              left: 10,
+              backgroundColor: 'primary.main',
+              color: 'darkblue.main',
+              fontWeight: 'bold',
+              zIndex: 8,
+            }}
+            label={item.Start.year}
+            variant="filled"
+          ></Chip>
+          {item.Img == null ? (
+            //Default case if no image was provided by the user
             <Box
-              className={styles.words}
               sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                backgroundColor: 'rgba(0,0,0,0.75)',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                overflow: 'scroll',
+                borderRadius: '4px',
+                borderColor: 'white',
+                height: '15vw',
               }}
             >
-              <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-                sx={{ height: '80%' }}
-              >
-                <Grid>
-                  <Typography sx={{ p: 2, overflow: 'clip' }} variant="body1" textAlign="center">
-                    {item.description}
-                  </Typography>
-                </Grid>
-              </Grid>
+              <Image
+                style={{ borderRadius: '4px', objectPosition: 'top' }}
+                objectFit="contain"
+                fill
+                sizes="(max-width: 1080px) 20vw, (max-width: 500px) 10vw, 15vw"
+                loading={'lazy'}
+                src={`wsrn2.png`}
+                alt={item.title}
+              />
             </Box>
-            <ImageListItemBar
-              position="below"
-              sx={{ backgroundColor: '#9EB7CC', color: '#31485E' }}
-              title={
-                <Typography fontWeight="bold" sx={{ color: '#31485E', ml: 2 }}>
-                  {item.title} - {item.dj}
+          ) : (
+            <Box
+              sx={{
+                objectFit: 'cover',
+                objectPosition: 'center',
+                overflow: 'scroll',
+                borderRadius: '4px',
+                borderColor: 'white',
+              }}
+            >
+              <img
+                style={{
+                  width: '100%',
+                  height: '90%',
+                  objectFit: 'contain',
+                  borderRadius: '4px',
+                  objectPosition: 'top',
+                }}
+                //objectFit="contain"
+                //fill
+                //sizes="(max-width: 1000px) 80vw, (max-width: 1000px) 20vw, 15vw"
+                //loading={'lazy'}
+                src={item.Img}
+                alt={item.Name}
+              />
+            </Box>
+          )}
+          <Box
+            className={styles.words}
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              overflow: 'scroll',
+              zIndex: 10,
+
+              backgroundColor: 'rgba(0,0,0,0.85)',
+            }}
+          >
+            <Grid container direction="column" justifyContent="center" alignItems="center">
+              <Grid>
+                <Typography
+                  sx={{ p: 2, maxWidth: '100%', overflow: 'auto' }}
+                  variant="body1"
+                  textAlign="center"
+                >
+                  {item.Desc}
                 </Typography>
-              }
-              subtitle={
-                <>
-                  <Typography fontWeight={100} sx={{ color: '#31485E', ml: 2 }}>
-                    {moment.weekdays(item.dotw)}
-                  </Typography>
-                  <Typography fontWeight={100} sx={{ color: '#31485E', ml: 2 }}>
-                    {moment(item.startTime).format('LT') +
-                      ' - ' +
-                      moment(item.endTime).format('LT')}
-                  </Typography>
-                </>
-              }
-            />
-          </ImageListItem>
-        ));
+              </Grid>
+            </Grid>
+          </Box>
+          <ImageListItemBar
+            position="below"
+            sx={{ backgroundColor: '#9EB7CC', color: '#31485E' }}
+            title={
+              <Typography
+                fontWeight="bold"
+                sx={{ color: '#31485E', p: 1, whiteSpace: 'initial' }}
+                textAlign="center"
+              >
+                {item.Name}
+              </Typography>
+            }
+          />
+        </ImageListItem>
+      ));
     }
   };
 

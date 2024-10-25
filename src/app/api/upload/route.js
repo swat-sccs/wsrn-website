@@ -18,7 +18,7 @@ export const POST = async (req, res) => {
   const filename = file.name.replaceAll(' ', '_');
 
   try {
-    await writeFile(path.join('/data/images/' + filename), buffer);
+    await writeFile(path.join(process.cwd() + '/data/images/' + filename), buffer);
 
     return NextResponse.json({ Message: 'Success', status: 201 });
   } catch (error) {
