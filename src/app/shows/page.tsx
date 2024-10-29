@@ -33,7 +33,19 @@ export default function App() {
 
   const RenderCards = () => {
     if (!show_data_isLoading && !show_data_error) {
-      return show_data.map((item: any) => (
+      let sorted_data = new Array();
+      for (let i = 0; i < show_data.length; i++) {
+        if (show_data[i].Img != null) {
+          sorted_data.push(show_data[i]);
+        }
+      }
+      for (let i = 0; i < show_data.length; i++) {
+        if (show_data[i].Img == null) {
+          sorted_data.push(show_data[i]);
+        }
+      }
+
+      return sorted_data.map((item: any) => (
         <ImageListItem key={item.Name} sx={{ borderRadius: 20 }}>
           <Chip
             sx={{

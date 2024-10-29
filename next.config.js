@@ -10,7 +10,7 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    domains: ['drive.google.com'],
+    domains: ['drive.google.com', 'localhost:3000'],
     loader: 'custom',
     loaderFile: './lib/imgloader.ts',
   },
