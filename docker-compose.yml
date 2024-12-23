@@ -1,11 +1,11 @@
 services:
   wsrn-website:
     restart: unless-stopped
+    image: registry.sccs.swarthmore.edu/sccs/wsrn-website/wsrn-website:latest
     volumes:
       #- ./public/archive:/app/public/archive
       - wsrn-archive:/app/public/archive
       - wsrn-images:/data/images
-    image: wsrn:latest
     env_file:
       - .env.local
     build:
