@@ -47,7 +47,6 @@ services:
     env_file:
       - .env.local
     volumes:
-      - ./mock_sql/initMockDatabase.sql:/docker-entrypoint-initdb.d/init.sql
       - wsrn-data:/var/lib/mysql
     networks:
       - internal
