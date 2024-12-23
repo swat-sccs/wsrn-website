@@ -46,6 +46,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.51.5",
+    "react-social-media-embed": "^2.5.17",
     "react-sound-visualizer": "^1.1.1",
     "request": "^2.88.2",
     "sharp": "^0.33.2",

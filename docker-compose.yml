@@ -1,5 +1,5 @@
 services:
-  wsrn:
+  wsrn-website:
     restart: unless-stopped
     volumes:
       #- ./public/archive:/app/public/archive
@@ -37,7 +37,7 @@ services:
       - traefik
       - internal
 
-  db:
+  wsrn-website-db:
     image: mariadb:10.7
     hostname: wsrn-db
     deploy:
@@ -52,7 +52,7 @@ services:
     networks:
       - internal
 
-  static:
+  wsrn-website-static:
     image: edirom/cantaloupe
     restart: unless-stopped
     volumes:
