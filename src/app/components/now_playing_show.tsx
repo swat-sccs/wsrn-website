@@ -118,22 +118,16 @@ export default function UpcomingShows() {
           Recently Played
         </Typography>
 
-        <Box
-          sx={{
-            height: '17vh',
-            overflowY: 'scroll',
-          }}
-        >
+        <Box sx={{ height: 140, overflowY: 'scroll' }}>
           <iframe
             allowTransparency
             frameBorder={0}
             scrolling="no"
             style={{
               width: '100%',
-              overflow: 'auto',
-              height: '550px',
+              height: '100vh',
+              overflowY: 'auto',
               padding: 6,
-              color: 'darkblue.main',
             }}
             src="https://admin.wsrnfm.com/public/wsrn/history?theme=dark"
           ></iframe>

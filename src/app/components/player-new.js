@@ -450,7 +450,7 @@ export default function Player() {
                 {/*<PlayPauseComponent></PlayPauseComponent>*/}
               </Grid>
             )}
-            <Grid item xs={12} lg={'auto'} sx={{ pr: 5 }}>
+            <Grid item xs={12} lg={'auto'} sx={{ pr: 1 }}>
               <Box sx={{ color: theme.palette.darkblue.main, p: 2 }}>
                 {/*<RenderPlayer />*/}
                 <iframe
