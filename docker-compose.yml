@@ -6,8 +6,6 @@ services:
       #- ./public/archive:/app/public/archive
       - wsrn-archive:/app/public/archive
       - wsrn-images:/data/images
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
     env_file:
       - .env.local
     build:
