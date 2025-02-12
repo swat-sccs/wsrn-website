@@ -1,5 +1,6 @@
 FROM node:18-bullseye
 ENV NODE_ENV=production
+ENV TZ=America/New_York
 RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
 RUN mkdir -p /data/images && chown -R node:node /data/images

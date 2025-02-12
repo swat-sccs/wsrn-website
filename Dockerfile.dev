@@ -1,4 +1,5 @@
 FROM node:18-bullseye
+ENV TZ=America/New_York
 ENV NODE_ENV=production
 WORKDIR /app
 RUN chown -R node /app
